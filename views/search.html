@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}锋哥爱学习{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="content">
+                <ul class="blog-list">
+                    {{  blogList|safe }}
+                </ul>
+                <div class="txtcenter">
+
+                    <div class="paginav">
+                        <div class="paginav-btn"><a href="/search?keyword={{ keyword }}&page={{ nextPage }}">下一页</a></div>
+                        <div class="paginav-btn"><a href="/search?keyword={{ keyword }}&page={{ prevPage }}">上一页</a></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% include "common/sidebar.html" %}
+    </div>
+</div>
+
+{% endblock %}

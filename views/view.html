@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}锋哥爱学习{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="content">
+                <div class="blog-title-box">
+                    <h2 id="blog-title">{{ out.title }}</h2>
+                </div>
+                <div class="blog-body">
+                    {{ out.content|safe }}
+                </div>
+                <div class="blog-orig">
+                    <p>
+                        分类: <a href="/?cateId={{ out.cateId }}">{{ out.cateName }}</a>
+                        标签:   {% for tag in tags %} <a href="/?tagId={{ tag.ID }}">{{ tag.Name }}</a>  {% endfor %}
+                        发布于: {{ out.publishTime }}, 点击数: <span id="vct"></span>
+                        {% if out.username != ""  %}
+                        {% if isAdmin == "yes" %}
+                        , <a href="/admin/editblog/{{ out.aid }}">编辑</a>
+                        {% endif %}
+                        {% endif %}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        {% include "common/sidebar.html" %}
+    </div>
+</div>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js" async="async"></script>
+<script src="/countview/{{ out.aid }}" async="async"></script>
+{% endblock %}
