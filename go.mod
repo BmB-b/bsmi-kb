@@ -1,4 +1,4 @@
-module code.aliyun.com/netroby/gosense
+module github.com/cnmade/bsmi-kb
 
 go 1.15
 
