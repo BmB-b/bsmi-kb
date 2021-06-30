@@ -3,8 +3,8 @@ module github.com/cnmade/bsmi-kb
 go 1.15
 
 require (
-	gitee.com/cnmade/pongo2gin v1.0.1
-	github.com/aws/aws-sdk-go v1.38.67
+	github.com/aws/aws-sdk-go v1.38.69
+	github.com/cnmade/pongo2gin v1.0.2
 	github.com/disintegration/imaging v1.6.2
 	github.com/flosch/pongo2/v4 v4.0.2
 	github.com/gin-contrib/sessions v0.0.3
@@ -29,10 +29,11 @@ require (
 	github.com/ztrue/tracerr v0.3.0
 	go.uber.org/atomic v1.8.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
-	go.uber.org/zap v1.17.0
+	go.uber.org/zap v1.18.1
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
-	golang.org/x/image v0.0.0-20210622092929-e6eecd499c2c // indirect
-	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22 // indirect
+	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/datatypes v1.0.1
 	gorm.io/driver/sqlite v1.1.4

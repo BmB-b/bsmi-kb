@@ -2,7 +2,7 @@ package admincontroller
 
 import (
 	"bytes"
-	"code.aliyun.com/netroby/gosense/app/orm/model"
+	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
@@ -20,7 +20,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"code.aliyun.com/netroby/gosense/pkg/common"
+	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/h2non/filetype"
 
 	"strconv"

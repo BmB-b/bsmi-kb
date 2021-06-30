@@ -1,7 +1,7 @@
 package common
 
 import (
-	"code.aliyun.com/netroby/gosense/pkg/version"
+	"github.com/cnmade/bsmi-kb/pkg/version"
 	"github.com/flosch/pongo2/v4"
 )
 import "github.com/imdario/mergo"

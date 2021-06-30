@@ -1,9 +1,9 @@
 package admincontroller
 
 import (
-	"code.aliyun.com/netroby/gosense/app/orm/model"
-	"code.aliyun.com/netroby/gosense/app/vo"
-	"code.aliyun.com/netroby/gosense/pkg/common"
+	"github.com/cnmade/bsmi-kb/app/orm/model"
+	"github.com/cnmade/bsmi-kb/app/vo"
+	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"

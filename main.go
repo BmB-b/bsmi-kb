@@ -1,16 +1,16 @@
 package main
 
 import (
-	. "code.aliyun.com/netroby/gosense/app/controller"
-	"code.aliyun.com/netroby/gosense/app/controller/admincontroller"
-	"code.aliyun.com/netroby/gosense/pkg/common"
+	. "github.com/cnmade/bsmi-kb/app/controller"
+	"github.com/cnmade/bsmi-kb/app/controller/admincontroller"
+	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/zerolog/log"
 
-	"gitee.com/cnmade/pongo2gin"
+	"github.com/cnmade/pongo2gin"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 		AlwaysNoCache: true,
 	})
 
-	r.Static("/assets", "./vol/assets")
+	r.Static("/assets", "./public/assets")
 	store := cookie.NewStore([]byte("gssecret"))
 	r.Use(sessions.Sessions("mysession", store))
 	fc := new(FrontController)
@@ -82,8 +82,8 @@ func main() {
 		api.GET("/", a.Index)
 		api.GET("view/:id", a.View)
 	}
-	log.Info().Msg("Server listen on 127.0.0.1:8002")
-	err := r.Run("127.0.0.1:8002")
+	log.Info().Msg("Server listen on 127.0.0.1:8005")
+	err := r.Run("127.0.0.1:8005")
 	if err != nil {
 		common.LogError(err)
 	}

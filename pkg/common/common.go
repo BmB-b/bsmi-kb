@@ -1,11 +1,11 @@
 package common
 
 import (
-	"code.aliyun.com/netroby/gosense/app/orm/model"
-	"github.com/grokify/html-strip-tags-go"
 	"database/sql"
+	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-gonic/gin"
+	"github.com/grokify/html-strip-tags-go"
 	"github.com/naoina/toml"
 	"github.com/ztrue/tracerr"
 	"go.uber.org/zap"
@@ -189,7 +189,7 @@ var (
 func InitApp() {
 	Config = GetConfig()
 //	gin.SetMode(Config.SrvMode)
-	gin.SetMode("debug")
+	gin.SetMode(gin.DebugMode)
 	//DB = GetDB(Config)
 	NewDb = GetNewDb(Config)
 	defer Logger.Sync()

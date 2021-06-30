@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"code.aliyun.com/netroby/gosense/app/orm/model"
-	"code.aliyun.com/netroby/gosense/app/service/category_service"
-	"code.aliyun.com/netroby/gosense/app/service/tag_service"
-	"code.aliyun.com/netroby/gosense/app/vo"
-	"code.aliyun.com/netroby/gosense/pkg/common"
+	"github.com/cnmade/bsmi-kb/app/orm/model"
+	"github.com/cnmade/bsmi-kb/app/service/category_service"
+	"github.com/cnmade/bsmi-kb/app/service/tag_service"
+	"github.com/cnmade/bsmi-kb/app/vo"
+	"github.com/cnmade/bsmi-kb/pkg/common"
 	"database/sql"
 	"encoding/json"
 	"errors"

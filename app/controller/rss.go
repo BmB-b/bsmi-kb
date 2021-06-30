@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"code.aliyun.com/netroby/gosense/app/orm/model"
-	"code.aliyun.com/netroby/gosense/pkg/common"
+	"github.com/cnmade/bsmi-kb/app/orm/model"
+	"github.com/cnmade/bsmi-kb/pkg/common"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/feeds"

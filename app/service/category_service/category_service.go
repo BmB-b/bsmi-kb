@@ -1,8 +1,8 @@
 package category_service
 
 import (
-	"code.aliyun.com/netroby/gosense/pkg/common"
-	"code.aliyun.com/netroby/gosense/app/orm/model"
+	"github.com/cnmade/bsmi-kb/pkg/common"
+	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"errors"
 	"gorm.io/gorm"
 )

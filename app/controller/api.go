@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"code.aliyun.com/netroby/gosense/pkg/common"
+	"github.com/cnmade/bsmi-kb/pkg/common"
 
 	"database/sql"
 	"fmt"
