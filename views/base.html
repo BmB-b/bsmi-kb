@@ -80,6 +80,13 @@
                         autoOpen: true,
                         dragAndDrop: true
                     });
+                    $('#tree1').on(
+                        "tree.click",
+                        function (e) {
+                            e.preventDefault();
+                            console.log(e.node.name);
+                        }
+                    );
                 </script>
 
             </div>
