@@ -34,88 +34,44 @@ func (a *Api) NavAll(c *gin.Context) {
 					{
 						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
 						Id: 5,
-						Children: []vo.Nav_item{
-							{
-								Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-								Id:   5,
-							},
-						},
+						LoadOnDemand: true,
 					},
 					{
 						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
 						Id: 5,
-						Children: []vo.Nav_item{
-							{
-								Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-								Id: 5,
-							},
-						},
+						LoadOnDemand: true,
 
 					},
 					{
 						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
 						Id: 5,
-						Children: []vo.Nav_item{
-							{
-								Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-								Id: 5,
-							},
-						},
+						LoadOnDemand: true,
+					},
+					{
+						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
+						Id: 5,
+						LoadOnDemand: true,
+					},
+					{
+						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
+						Id: 5,
+						LoadOnDemand: true,
+					},
+					{
+						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
+						Id: 5,
+						LoadOnDemand: true,
+					},
+					{
+						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
+						Id: 5,
+						LoadOnDemand: true,
 
 					},
 					{
 						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
 						Id: 5,
-						Children: []vo.Nav_item{
-							{
-								Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-								Id: 5,
-							},
-						},
-
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						Children: []vo.Nav_item{
-							{
-								Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-								Id: 5,
-							},
-						},
-
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						Children: []vo.Nav_item{
-							{
-								Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-								Id: 5,
-							},
-						},
-
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						Children: []vo.Nav_item{
-							{
-								Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-								Id: 5,
-							},
-						},
-
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						Children: []vo.Nav_item{
-							{
-								Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-								Id: 5,
-							},
-						},
+						LoadOnDemand: true,
 
 					},
 				},
@@ -123,7 +79,20 @@ func (a *Api) NavAll(c *gin.Context) {
 			{
 				Name: "宇航员首次在太空成功演示CRISPR/Cas9基因编辑技术",
 				Id:   3,
+				LoadOnDemand: true,
 			}},
+	})
+	c.JSON(http.StatusOK, na)
+}
+
+
+func (a *Api) NavLoad(c *gin.Context) {
+
+	var na []vo.Nav_item
+	na = append(na, vo.Nav_item{
+		Name: "历史改编剧《列宁格勒》将开机制作 Michael Hirst担任编剧",
+		Id:   1147,
+		LoadOnDemand: true,
 	})
 	c.JSON(http.StatusOK, na)
 }
