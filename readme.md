@@ -11,3 +11,8 @@ bsmi kb 知识库
 ```
 
 需要加上sqlite 扩展json1
+
+
+## demo 效果图
+
+![Snipaste_2021-07-01_17-37-14](https://user-images.githubusercontent.com/278153/124104252-a7ca4c80-da94-11eb-97fd-5784a81b5ce3.png)
