@@ -18,6 +18,8 @@ a {
  */
 
 .sidebar {
+    min-width: 100px;
+    max-width: 300px;
     position: fixed;
     top: 0;
     /* rtl:raw:

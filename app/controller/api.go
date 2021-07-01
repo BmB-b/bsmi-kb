@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/gin-gonic/gin"
@@ -22,79 +23,51 @@ type apiBlogList struct {
 
 func (a *Api) NavAll(c *gin.Context) {
 
+	var articleList []model.Article
+	common.NewDb.Where("p_aid = 0").Find(&articleList)
+
 	var na []vo.Nav_item
-	na = append(na, vo.Nav_item{
-		Name: "科学家创造出类似肽的分子Peptoids 可用于治疗疾病",
-		Id:   1,
-		Children: []vo.Nav_item{
-			{
-				Name: "零日漏洞PrintNightmare曝光：可在Windows后台执行远程代码",
-				Id:   2,
-				Children: []vo.Nav_item{
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						LoadOnDemand: true,
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						LoadOnDemand: true,
-
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						LoadOnDemand: true,
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						LoadOnDemand: true,
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						LoadOnDemand: true,
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						LoadOnDemand: true,
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						LoadOnDemand: true,
-
-					},
-					{
-						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
-						Id: 5,
-						LoadOnDemand: true,
-
-					},
-				},
-			},
-			{
-				Name: "宇航员首次在太空成功演示CRISPR/Cas9基因编辑技术",
-				Id:   3,
-				LoadOnDemand: true,
-			}},
-	})
+	for _, s := range articleList {
+		na = append(na, vo.Nav_item{
+			Name:         s.Title,
+			Id: uint64(s.Aid),
+			LoadOnDemand: true,
+		})
+	}
 	c.JSON(http.StatusOK, na)
 }
 
 
 func (a *Api) NavLoad(c *gin.Context) {
+	rawAid := c.Query("node")
+	if rawAid == "" {
+		c.JSON(http.StatusOK, []string{})
+		return
+	}
+	aid, err := strconv.Atoi(rawAid)
+	fmt.Println(aid)
+	if err != nil {
+		common.Sugar.Fatal(err)
+		c.JSON(http.StatusOK, []string{})
+		return
+	}
+
+	var articleList []model.Article
+	common.NewDb.Where("p_aid = ?", aid).Find(&articleList)
 
 	var na []vo.Nav_item
-	na = append(na, vo.Nav_item{
-		Name: "历史改编剧《列宁格勒》将开机制作 Michael Hirst担任编剧",
-		Id:   1147,
-		LoadOnDemand: true,
-	})
-	c.JSON(http.StatusOK, na)
+	for _, s := range articleList {
+		na = append(na, vo.Nav_item{
+			Name:         s.Title,
+			Id: uint64(s.Aid),
+			LoadOnDemand: true,
+		})
+	}
+	if (len(na) <= 0) {
+		 c.JSON(http.StatusOK, []string{})
+	} else {
+		c.JSON(http.StatusOK, na)
+	}
 }
 func (a *Api) Index(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
