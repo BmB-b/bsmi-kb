@@ -146,7 +146,7 @@ func (a *Api) Index(c *gin.Context) {
 	offset := page * rpp
 	var blogListSlice []apiBlogList
 
-	rows, err := common.DB.Query("Select aid, title from gs_article where publish_status = 1 order by aid desc limit ? offset ? ", &rpp, &offset)
+	rows, err := common.DB.Query("Select aid, title from bk_article where publish_status = 1 order by aid desc limit ? offset ? ", &rpp, &offset)
 	if err != nil {
 		common.Sugar.Fatal(err)
 	}
@@ -189,7 +189,7 @@ func (a *Api) View(c *gin.Context) {
 	}
 	var b apiBlogItem
 
-	rows, err := common.DB.Query("Select aid, title, content from gs_article where aid =  ? limit 1 ", &aid)
+	rows, err := common.DB.Query("Select aid, title, content from bk_article where aid =  ? limit 1 ", &aid)
 	if err != nil {
 		common.Sugar.Fatal(err)
 	}

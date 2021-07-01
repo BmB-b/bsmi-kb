@@ -1,18 +1,19 @@
 package model
 import  "gorm.io/datatypes"
 type Article struct {
-	Aid int64
-	CateId int64 `gorm:"default:0"`
-	Title string
-	Content string
-	PublishTime string
-	PublishStatus int
-	Views int64
-	TagIds datatypes.JSON
+	Aid int64 `json:"aid"`
+	CateId int64 `gorm:"default:0" json:"cate_id"`
+	Title string `json:"title"`
+	Content string `json:"content"`
+	PublishTime string `json:"publish_time"`
+	PublishStatus int `json:"publish_status"`
+	Views int64 `json:"views"`
+	TagIds datatypes.JSON `json:"tag_ids"`
+	PAid int64 `json:"p_aid"`
 }
 
 
 func (Article) TableName()  string {
-	return "gs_article"
+	return "bk_article"
 	
 }

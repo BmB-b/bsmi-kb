@@ -1,9 +1,9 @@
 package tag_service
 
 import (
+	"errors"
 	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/pkg/common"
-	"errors"
 	"gorm.io/gorm"
 )
 
@@ -49,7 +49,7 @@ func CountWithTagId(tagId int64) int64 {
 	}
 
 	var result Result
-	common.NewDb.Raw("select count(*) as cnt from gs_article, json_each(gs_article.tag_ids) where json_each.value = ?", tagId).
+	common.NewDb.Raw("select count(*) as cnt from bk_article, json_each(bk_article.tag_ids) where json_each.value = ?", tagId).
 		Find(&result);
 	return result.Cnt;
 }

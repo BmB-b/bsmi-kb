@@ -1,15 +1,15 @@
 package controller
 
 import (
+	"database/sql"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/app/service/category_service"
 	"github.com/cnmade/bsmi-kb/app/service/tag_service"
 	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
-	"database/sql"
-	"encoding/json"
-	"errors"
-	"fmt"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -173,7 +173,7 @@ func (fc *FrontController) HomeCtr(c *gin.Context) {
 	if tagId != "" {
 		tagIdNum, _ := strconv.Atoi(tagId)
 		result = common.NewDb.
-			Raw("select *  from  gs_article, json_each(gs_article.tag_ids) where json_each.value = ? LIMIT ? OFFSET ? ", tagIdNum, rpp, offset).
+			Raw("select *  from  bk_article, json_each(bk_article.tag_ids) where json_each.value = ? LIMIT ? OFFSET ? ", tagIdNum, rpp, offset).
 			Find(&blogDataList)
 	} else {
 
