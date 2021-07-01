@@ -24,15 +24,21 @@ func (a *Api) NavAll(c *gin.Context) {
 
 	var na []vo.Nav_item
 	na = append(na, vo.Nav_item{
-		Name: "菜单",
+		Name: "科学家创造出类似肽的分子Peptoids 可用于治疗疾病",
 		Id:   1,
 		Children: []vo.Nav_item{
 			{
-				Name: "川菜",
+				Name: "零日漏洞PrintNightmare曝光：可在Windows后台执行远程代码",
 				Id:   2,
+				Children: []vo.Nav_item{
+					{
+						Name: "《生化危机：无尽黑暗》4大主角艺图海报亮相 7月8日播出",
+						Id: 5,
+					},
+				},
 			},
 			{
-				Name: "湘菜",
+				Name: "宇航员首次在太空成功演示CRISPR/Cas9基因编辑技术",
 				Id:   3,
 			}},
 	})

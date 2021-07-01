@@ -8,6 +8,11 @@ body {
     vertical-align: text-bottom;
 }
 
+
+a {
+    text-decoration: none;
+    color: #6d737b;
+}
 /*
  * Sidebar
  */
