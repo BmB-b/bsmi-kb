@@ -63,7 +63,7 @@
             <div class="position-sticky pt-3">
                     <div id="tree1" class="nav flex-column" data-url="/example_data/"></div>
                 <script type="application/javascript">
-                    var data = [
+                    /*var data = [
                         {
                             label: "node1",
                             id: 1,
@@ -75,11 +75,17 @@
                             children: [{ label: "child3", id: 5 }]
                         }
                     ];
-                    $("#tree1").tree({
-                        data: data,
-                        autoOpen: true,
-                        dragAndDrop: true
-                    });
+*/
+                    $.getJSON(
+                        '/api/nav-all/',
+                        function(data) {
+                            $('#tree1').tree({
+                                data: data,
+                                autoOpen: true,
+                                dragAndDrop: true
+                            });
+                        }
+                    );
                     $('#tree1').on(
                         "tree.click",
                         function (e) {

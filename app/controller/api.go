@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
+	"github.com/gin-gonic/gin"
 
 	"database/sql"
 	"fmt"
@@ -19,6 +20,24 @@ type apiBlogList struct {
 	Title string `form:"title" json:"title"  binding:"required"`
 }
 
+func (a *Api) NavAll(c *gin.Context) {
+
+	var na []vo.Nav_item
+	na = append(na, vo.Nav_item{
+		Name: "菜单",
+		Id:   1,
+		Children: []vo.Nav_item{
+			{
+				Name: "川菜",
+				Id:   2,
+			},
+			{
+				Name: "湘菜",
+				Id:   3,
+			}},
+	})
+	c.JSON(http.StatusOK, na)
+}
 func (a *Api) Index(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {
@@ -38,32 +57,32 @@ func (a *Api) Index(c *gin.Context) {
 	offset := page * rpp
 	var blogListSlice []apiBlogList
 
-		rows, err := common.DB.Query("Select aid, title from gs_article where publish_status = 1 order by aid desc limit ? offset ? ", &rpp, &offset)
-		if err != nil {
-			common.Sugar.Fatal(err)
-		}
-		defer common.CloseRowsDefer(rows)
-		if rows != nil {
-			var (
-				aid   sql.NullString
-				title sql.NullString
-			)
-			blogListSlice = make([]apiBlogList, 0) //Must be zero slice
-			var aBlog apiBlogList
-			for rows.Next() {
-				err := rows.Scan(&aid, &title)
-				if err != nil {
-					common.Sugar.Fatal(err)
-				}
-				aBlog.Aid = aid.String
-				aBlog.Title = title.String
-				blogListSlice = append(blogListSlice, aBlog)
-			}
-			err = rows.Err()
+	rows, err := common.DB.Query("Select aid, title from gs_article where publish_status = 1 order by aid desc limit ? offset ? ", &rpp, &offset)
+	if err != nil {
+		common.Sugar.Fatal(err)
+	}
+	defer common.CloseRowsDefer(rows)
+	if rows != nil {
+		var (
+			aid   sql.NullString
+			title sql.NullString
+		)
+		blogListSlice = make([]apiBlogList, 0) //Must be zero slice
+		var aBlog apiBlogList
+		for rows.Next() {
+			err := rows.Scan(&aid, &title)
 			if err != nil {
 				common.Sugar.Fatal(err)
 			}
+			aBlog.Aid = aid.String
+			aBlog.Title = title.String
+			blogListSlice = append(blogListSlice, aBlog)
 		}
+		err = rows.Err()
+		if err != nil {
+			common.Sugar.Fatal(err)
+		}
+	}
 	c.JSON(http.StatusOK, blogListSlice)
 }
 
@@ -81,32 +100,32 @@ func (a *Api) View(c *gin.Context) {
 	}
 	var b apiBlogItem
 
-		rows, err := common.DB.Query("Select aid, title, content from gs_article where aid =  ? limit 1 ", &aid)
+	rows, err := common.DB.Query("Select aid, title, content from gs_article where aid =  ? limit 1 ", &aid)
+	if err != nil {
+		common.Sugar.Fatal(err)
+	}
+	defer common.CloseRowsDefer(rows)
+	if rows != nil {
+		var (
+			aid     sql.NullString
+			title   sql.NullString
+			content sql.NullString
+		)
+		for rows.Next() {
+			err := rows.Scan(&aid, &title, &content)
+			if err != nil {
+				fmt.Println(err)
+			}
+			b.Aid = aid.String
+			b.Title = title.String
+			b.Content = content.String
+		}
+		fmt.Println(b)
+		err = rows.Err()
 		if err != nil {
 			common.Sugar.Fatal(err)
 		}
-		defer common.CloseRowsDefer(rows)
-		if rows != nil {
-			var (
-				aid     sql.NullString
-				title   sql.NullString
-				content sql.NullString
-			)
-			for rows.Next() {
-				err := rows.Scan(&aid, &title, &content)
-				if err != nil {
-					fmt.Println(err)
-				}
-				b.Aid = aid.String
-				b.Title = title.String
-				b.Content = content.String
-			}
-			fmt.Println(b)
-			err = rows.Err()
-			if err != nil {
-				common.Sugar.Fatal(err)
-			}
-		}
+	}
 	fmt.Println(b)
 	c.JSON(http.StatusOK, b)
 }
