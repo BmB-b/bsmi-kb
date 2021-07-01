@@ -76,6 +76,8 @@
                         '/api/nav-all/',
                         function(data) {
                             $('#tree1').tree({
+                                closedIcon: $('<span>+</span> '),
+                                openedIcon: $('<span>-</span> '),
                                 data: data,
                                 autoOpen: true,
                                 dragAndDrop: true
