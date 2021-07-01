@@ -5,6 +5,7 @@ type Blog_vo struct {
 	Content string `form:"content" binding:"required"`
 	CateId  int64  `form:"cateId" `
 	Tags    string `form:"tags" `
+	PAid    int64  `form:"paid" `
 }
 
 type EditBlog_vo struct {
@@ -13,5 +14,6 @@ type EditBlog_vo struct {
 	Content string `form:"content" binding:"required"`
 	CateId  int64  `form:"cateId" `
 	Tags    string  `form:"tags" `
+	PAid    int64  `form:"paid" `
 }
 

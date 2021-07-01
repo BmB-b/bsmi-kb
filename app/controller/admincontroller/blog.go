@@ -1,14 +1,14 @@
 package admincontroller
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/app/service/category_service"
 	"github.com/cnmade/bsmi-kb/app/service/tag_service"
 	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
-	"encoding/json"
-	"errors"
-	"fmt"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -143,6 +143,7 @@ func EditBlogCtr(c *gin.Context) {
 			"content":         blogItem.Content,
 			"publishTime":     blogItem.PublishTime,
 			"tags":            strings.Join(tagStr, ","),
+			"paid": blogItem.PAid,
 			"categories":      categories,
 			"cateId":      blogItem.CateId,
 			"views":           fmt.Sprintf("%d", blogItem.Views),
@@ -197,6 +198,7 @@ func SaveBlogEditCtr(c *gin.Context) {
 	blogItem.CateId = BI.CateId
 	blogItem.Content = BI.Content
 	blogItem.TagIds = tagIdStr
+	blogItem.PAid = BI.PAid
 	common.NewDb.
 		Where("aid = ?", blogItem.Aid).
 		Save(blogItem)
@@ -273,6 +275,7 @@ func SaveBlogAddCtr(c *gin.Context) {
 		PublishStatus: 1,
 		CateId:        BI.CateId,
 		TagIds:        tagIdStr,
+		PAid: BI.PAid,
 	}
 
 	result := common.NewDb.Create(&blogItem)
