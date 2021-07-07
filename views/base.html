@@ -73,18 +73,27 @@
                         }
                     ];
 */
+                    var $tree = $('#tree1');
                     $.getJSON(
                         '/api/nav-all/',
                         function(data) {
-                            $('#tree1').tree({
+                            $tree.tree({
                                 closedIcon: $('<span>+</span> '),
                                 openedIcon: $('<span>-</span> '),
                                 data: data,
-                                autoOpen: 1,
+                                autoOpen: 0,
+                              //  autoOpen: 1,
                                 dragAndDrop: true
                             });
                         }
                     );
+
+
+
+                    //打开指定的 节点
+                   // var node = $tree.tree('getNodeById', 123);
+                //    $tree.tree('openNode', node);
+
                     $('#tree1').on(
                         "tree.click",
                         function (e) {
