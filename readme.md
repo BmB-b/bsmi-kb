@@ -1,7 +1,7 @@
 # bsmi-kb
 
 
-bsmi kb 知识库
+bsmi kb 知识库,  demo 预览地址： [https://kb.bsmi.info/#](https://kb.bsmi.info/#)
 
 ## 准备
 
