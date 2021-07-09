@@ -81,14 +81,32 @@
                                 closedIcon: $('<span>+</span> '),
                                 openedIcon: $('<span>-</span> '),
                                 data: data,
-                                autoOpen: 0,
+                                autoOpen: 3,
                               //  autoOpen: 1,
-                                dragAndDrop: true
+                                dragAndDrop: true,
+                                onCreateLi: function(node, $li) {
+                                    // Append a link to the jqtree-element div.
+                                    // The link has an url '#node-[id]' and a data property 'node-id'.
+                                    $li.find('.jqtree-title').html(
+                                        '<a href="/#view/'+ node.id +'">' + node.name + '</a>'
+                                    );
+                                }
                             });
                         }
                     );
 
 
+                    let urlHash = window.location.hash;
+                    console.log('url hash: ' + urlHash);
+                    let articlId = 0;
+
+                    if (urlHash != undefined && urlHash.length > 6) {
+                        articlId = urlHash.substr(6);
+                    }
+
+                    if (articlId > 0) {
+                        view_article(articlId)
+                    }
 
                     //打开指定的 节点
                    // var node = $tree.tree('getNodeById', 123);
