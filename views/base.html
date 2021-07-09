@@ -82,7 +82,6 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-9 px-md-4" id="content">
 
-            {% block content %}{% endblock %}
         </main>
     </div>
 </div>
@@ -110,6 +109,8 @@
 
         if (articlId > 0) {
             view_article(articlId)
+        } else {
+            view_article(1);
         }
 
 
