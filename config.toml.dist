@@ -1,7 +1,7 @@
 dbdsn="file:./vol/db.sqlite"
 admin_user = "admin"
 admin_password = "admin"
-site_name = "Hard Coder"
+site_name = "知识库"
 site_description = "Linux, opensource, golang"
 srvMode="release"
 [object_storage]

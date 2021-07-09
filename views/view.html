@@ -1,18 +1,23 @@
+<div class="blog-title-box">
+    <h2 id="blog-title">{{ out.title }}</h2>
+</div>
+<div class="blog-body">
+    {{ out.content|safe }}
+</div>
+<div class="blog-orig">
+    <p>
+        分类: <a href="/?cateId={{ out.cateId }}">{{ out.cateName }}</a>
+        标签: {% for tag in tags %} <a href="/?tagId={{ tag.ID }}">{{ tag.Name }}</a> {% endfor %}
+        发布于: {{ out.publishTime }}, 点击数: <span id="vct"></span>
 
+    </p>
 
-                <div class="blog-title-box">
-                    <h2 id="blog-title">{{ out.title }}</h2>
-                </div>
-                <div class="blog-body">
-                    {{ out.content|safe }}
-                </div>
-                <div class="blog-orig">
-                    <p>
-                        分类: <a href="/?cateId={{ out.cateId }}">{{ out.cateName }}</a>
-                        标签:   {% for tag in tags %} <a href="/?tagId={{ tag.ID }}">{{ tag.Name }}</a>  {% endfor %}
-                        发布于: {{ out.publishTime }}, 点击数: <span id="vct"></span>
+    {% if username != "" %}
 
-                    </p>
-                </div>
+    <p><a href="/admin/editblog/{{ out.aid }}">编辑内容</a></p>
+    {% else %}
+
+    {% endif %}
+</div>
 
 <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js" async="async"></script>

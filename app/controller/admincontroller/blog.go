@@ -210,7 +210,7 @@ func SaveBlogEditCtr(c *gin.Context) {
 	CKey := fmt.Sprintf("blogitem-%d", BI.Aid)
 	common.LogInfo("Remove cache Key:" + CKey)
 
-	c.Redirect(http.StatusFound, fmt.Sprintf("/#/view/%d", BI.Aid))
+	c.Redirect(http.StatusFound, fmt.Sprintf("/#view/%d", BI.Aid))
 
 }
 
@@ -290,7 +290,7 @@ func SaveBlogAddCtr(c *gin.Context) {
 		tag_service.RefreshCountOfArticle(tmpTagId)
 	}
 	if result.Error == nil {
-		c.Redirect(http.StatusFound, fmt.Sprintf("/#/view/%d", nextAid))
+		c.Redirect(http.StatusFound, fmt.Sprintf("/#view/%d", nextAid))
 	} else {
 		common.LogError(result.Error)
 		common.ShowUMessage(c, &common.Umsg{Msg: "失败", Url: "/"})
