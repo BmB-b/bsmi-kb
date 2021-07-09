@@ -99,7 +99,8 @@
                         function (e) {
                           //  e.preventDefault();
                             console.log(e.node.name);
-                            top.location = "/view/" + e.node.id;
+                            //top.location = "/view/" + e.node.id;
+                            view_article(e.node.id);
                         }
                     ).on(
                         'tree.move',
@@ -109,14 +110,21 @@
                             console.log('position', event.move_info.position);
                             console.log('previous_parent', event.move_info.previous_parent);
                         }
-                    );;
+                    );
+
+                    function view_article(aid) {
+                        $.get("/view/" + aid, function (data) {
+                            $('#content').html(data);
+                        });
+                    }
+
 
                 </script>
 
             </div>
         </nav>
 
-        <main class="col-md-9 ms-sm-auto col-lg-9 px-md-4">
+        <main class="col-md-9 ms-sm-auto col-lg-9 px-md-4" id="content">
 
             {% block content %}{% endblock %}
         </main>
