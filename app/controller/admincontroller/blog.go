@@ -210,12 +210,16 @@ func SaveBlogEditCtr(c *gin.Context) {
 	CKey := fmt.Sprintf("blogitem-%d", BI.Aid)
 	common.LogInfo("Remove cache Key:" + CKey)
 
-	c.Redirect(http.StatusFound, fmt.Sprintf("/view/%d", BI.Aid))
+	c.Redirect(http.StatusFound, fmt.Sprintf("/#/view/%d", BI.Aid))
 
 }
 
 func AddBlogCtr(c *gin.Context) {
-	err, _, _ := AdminPermissionCheck(c)
+	paid, err := strconv.Atoi(c.DefaultQuery("paid", "0"))
+	if err != nil {
+		common.Sugar.Fatal(err)
+	}
+	err, _, _ = AdminPermissionCheck(c)
 	if err != nil {
 
 		common.LogError(err)
@@ -229,6 +233,7 @@ func AddBlogCtr(c *gin.Context) {
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.Config.Site_description,
 			"categories":      categories,
+			"paid": paid,
 		}))
 	return
 }
@@ -285,7 +290,7 @@ func SaveBlogAddCtr(c *gin.Context) {
 		tag_service.RefreshCountOfArticle(tmpTagId)
 	}
 	if result.Error == nil {
-		c.Redirect(http.StatusFound, fmt.Sprintf("/view/%d", nextAid))
+		c.Redirect(http.StatusFound, fmt.Sprintf("/#/view/%d", nextAid))
 	} else {
 		common.LogError(result.Error)
 		common.ShowUMessage(c, &common.Umsg{Msg: "失败", Url: "/"})

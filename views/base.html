@@ -49,7 +49,22 @@
     <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">
-            <a class="nav-link px-3" href="#">Sign out</a>
+
+            {% if username != "" %}
+            <div style="color:white">
+                欢迎 {{ username }} |
+                <a href="/admin">管理后台</a> |
+                <a href="/admin/list-cate">分类</a> |
+                <a href="/admin/list-tag">标签</a> |
+
+                <a href="/admin/addblog">新建页面</a> |
+                <a href="/admin/addblog" id="add-sub-page">新建子页面</a> |
+                <a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+            </div>
+            {% else %}
+
+            <a class="nav-link px-3" href="/admin/login">登录</a>
+            {% endif %}
         </div>
     </div>
 </header>
@@ -131,6 +146,7 @@
                     );
 
                     function view_article(aid) {
+                        $("#add-sub-page").attr("href", "/admin/addblog?paid="+aid);
                         $.get("/view/" + aid, function (data) {
                             $('#content').html(data);
                         });
