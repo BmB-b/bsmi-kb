@@ -1,9 +1,23 @@
 # bsmi-kb
 
 
-bsmi kb 知识库,  demo 预览地址： [https://kb.bsmi.info/#](https://kb.bsmi.info/#)
+bsmi kb 知识库,  
 
-## 准备
+demo 预览地址： [https://kb.bsmi.info/#](https://kb.bsmi.info/#)
+
+文档地址：[https://kb.bsmi.info/#view/3](https://kb.bsmi.info/#view/3)
+
+如果你想安装，使用，或者是参加开发，可以读一下文档
+
+## 开发准备
+
+如果你想开发和体验，请阅读这段文档说明。
+
+您需要准备好golang的开发环境，建议安装最新的golang 1.16.5或者以上版本。
+
+推荐在x64架构的cpu的电脑上运行，理论上windows, Linux 和mac都可以用
+
+那么编译命令如下， 是在Linux上面运行的。
 
 ```go 
 
@@ -11,6 +25,8 @@ bsmi kb 知识库,  demo 预览地址： [https://kb.bsmi.info/#](https://kb.bsm
 ```
 
 需要加上sqlite 扩展json1
+
+这样开发环境就可以用了，可以开始体验了
 
 
 ## demo 效果图
