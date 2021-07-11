@@ -52,7 +52,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-gosense
 cmd/setup/setup
 config.toml
 *.lock
@@ -71,3 +70,4 @@ assets_vfsdata.go
 
 bsmi-kb
 bsmi-kb.exe
+vol/
