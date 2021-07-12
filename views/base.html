@@ -157,10 +157,50 @@
         ).on(
             'tree.move',
             function (event) {
+
+                event.preventDefault();
+                // do the move first, and _then_ POST back.
+                event.move_info.do_move();
+
+
                 console.log('moved_node', event.move_info.moved_node);
                 console.log('target_node', event.move_info.target_node);
                 console.log('position', event.move_info.position);
                 console.log('previous_parent', event.move_info.previous_parent);
+
+                let new_paid = 0;
+                let new_sort = null;
+                if (event.move_info.position == "after" || event.move_info.position == "before") {
+                    new_paid = event.move_info.target_node.parent.id;
+                } else {
+                    new_paid = event.move_info.target_node.id;
+                }
+
+                let parent_node = $(this).tree('getNodeById', new_paid);
+
+                console.log('parent node: ', parent_node);
+
+
+
+                new_sort = parent_node.children;
+                console.log('new_paid', new_paid);
+                console.log('new_sort', new_sort);
+
+
+                console.log('parent childNodes data: ', JSON.stringify(parent_node.getData()));
+
+
+
+                let psort = "";
+
+                console.log('new_sort length', new_sort.length);
+                for (i = 0; i < new_sort.length; i++) {
+                    psort += new_sort[i].id + ",";
+                }
+                console.log(psort);
+                $.post("/api/resort", {new_paid: new_paid, new_sort: psort}, function (data) {
+                    console.log(data);
+                })
             }
         );
     });
