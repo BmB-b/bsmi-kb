@@ -69,6 +69,15 @@ func (a *Api) NavLoad(c *gin.Context) {
 		c.JSON(http.StatusOK, na)
 	}
 }
+
+
+func (a *Api) Resort(c *gin.Context) {
+
+	c.JSON(http.StatusOK, []string{})
+}
+
+
+
 func (a *Api) Index(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {

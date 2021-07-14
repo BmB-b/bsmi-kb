@@ -82,6 +82,7 @@ func main() {
 		api.GET("/", a.Index)
 		api.GET("/nav-all", a.NavAll)
 		api.GET("/nav-load", a.NavLoad)
+		api.POST("/resort", a.Resort)
 		api.GET("view/:id", a.View)
 	}
 	log.Info().Msg("Server listen on 127.0.0.1:8005")
