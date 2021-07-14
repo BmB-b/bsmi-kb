@@ -1,12 +1,13 @@
 package controller
 
 import (
+	"database/sql"
 	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/gin-gonic/gin"
+	"strings"
 
-	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"net/http"
@@ -24,19 +25,20 @@ type apiBlogList struct {
 func (a *Api) NavAll(c *gin.Context) {
 
 	var articleList []model.Article
-	common.NewDb.Where("p_aid = 0").Find(&articleList)
+	common.NewDb.Where("p_aid = 0").
+		Order("sort_id asc").
+		Find(&articleList)
 
 	var na []vo.Nav_item
 	for _, s := range articleList {
 		na = append(na, vo.Nav_item{
 			Name:         s.Title,
-			Id: uint64(s.Aid),
+			Id:           uint64(s.Aid),
 			LoadOnDemand: true,
 		})
 	}
 	c.JSON(http.StatusOK, na)
 }
-
 
 func (a *Api) NavLoad(c *gin.Context) {
 	rawAid := c.Query("node")
@@ -53,30 +55,56 @@ func (a *Api) NavLoad(c *gin.Context) {
 	}
 
 	var articleList []model.Article
-	common.NewDb.Where("p_aid = ?", aid).Find(&articleList)
+	common.NewDb.Where("p_aid = ?", aid).
+		Order("sort_id asc").
+		Find(&articleList)
 
 	var na []vo.Nav_item
 	for _, s := range articleList {
 		na = append(na, vo.Nav_item{
 			Name:         s.Title,
-			Id: uint64(s.Aid),
+			Id:           uint64(s.Aid),
 			LoadOnDemand: true,
 		})
 	}
-	if (len(na) <= 0) {
-		 c.JSON(http.StatusOK, []string{})
+	if len(na) <= 0 {
+		c.JSON(http.StatusOK, []string{})
 	} else {
 		c.JSON(http.StatusOK, na)
 	}
 }
 
-
 func (a *Api) Resort(c *gin.Context) {
+
+	var req vo.Resort_req
+
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		common.Sugar.Error(err)
+		c.JSON(http.StatusOK, gin.H{"msg": "必须是正确的数据结构"})
+		return
+	}
+	common.Sugar.Infof("req: %+v", req)
+	common.NewDb.Model(&model.Article{}).
+		Where("aid = ?", req.MoveNodeId).
+		Update("p_aid", req.NewPaid)
+
+	spl := strings.Split(req.NewSort, ",")
+
+	if len(spl) > 0 {
+		for i, s := range spl {
+
+			if s != "" {
+				common.NewDb.Model(&model.Article{}).
+					Where("aid = ?", s).
+					Update("sort_id", i)
+			}
+		}
+
+	}
 
 	c.JSON(http.StatusOK, []string{})
 }
-
-
 
 func (a *Api) Index(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))

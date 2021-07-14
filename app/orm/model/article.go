@@ -10,6 +10,7 @@ type Article struct {
 	Views int64 `json:"views"`
 	TagIds datatypes.JSON `json:"tag_ids"`
 	PAid int64 `json:"p_aid"`
+	SortId int64 `json:"sort_id"`
 }
 
 

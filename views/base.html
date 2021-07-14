@@ -199,9 +199,15 @@
                     psort += new_sort[i].id + ",";
                 }
                 console.log(psort);
-                $.post("/api/resort", {move_node_id: move_node_id, new_paid: new_paid, new_sort: psort}, function (data) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/resort',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify({move_node_id: move_node_id, new_paid: new_paid, new_sort: psort})
+                }).done(function (data) {
                     console.log(data);
-                })
+                });
             }
         );
     });
