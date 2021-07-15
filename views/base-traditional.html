@@ -11,13 +11,11 @@
     <div class="container">
         <div class="" style="float:left">
             <a href="/" class="navbar-brand">{{ siteName }}</a>
-            <p style="color:white;clear: both;width:210px">{% block siteSologan %}关注web研发，IT，技术,Linux，开源,分享前沿技术。{%endblock%}</p>
         </div>
         <nav class="collapse navbar-collapse " role="navigation">
             <ul class="nav navbar-nav">
                 <li class="{{ homeActive }}"><a href="/">首页</a></li>
                 <li class="{{ tagActive }}"><a href="/list-tag">标签</a></li>
-                <li><a href="https://lkml.org/lkml/last100/" target="_blank">Linux邮件组</a></li>
                 <li class="{{ mActive }}"><a href="/about">关于作者</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
