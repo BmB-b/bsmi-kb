@@ -4,13 +4,12 @@ import (
 	. "github.com/cnmade/bsmi-kb/app/controller"
 	"github.com/cnmade/bsmi-kb/app/controller/admincontroller"
 	"github.com/cnmade/bsmi-kb/pkg/common"
+	"github.com/cnmade/pongo2gin"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/zerolog/log"
-
-	"github.com/cnmade/pongo2gin"
 )
 
 func main() {
@@ -24,6 +23,12 @@ func main() {
 
 	r.Static("/assets", "./public/assets")
 	store := cookie.NewStore([]byte("gssecret"))
+	store.Options(sessions.Options{
+		Path: "/",
+		MaxAge: 999999999,
+		HttpOnly: true,
+
+	})
 	r.Use(sessions.Sessions("mysession", store))
 	fc := new(FrontController)
 	r.GET("/", fc.HomeCtr)
