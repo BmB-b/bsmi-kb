@@ -8,13 +8,12 @@
     <p>
         分类: <a href="/?cateId={{ out.cateId }}">{{ out.cateName }}</a>
         标签: {% for tag in tags %} <a href="/?tagId={{ tag.ID }}">{{ tag.Name }}</a> {% endfor %}
-
         发布于: {{ out.publishTime }}, 更新于: {{ out.updateTime }}
     </p>
 
     {% if username != "" %}
 
-    <p><a href="/admin/editblog/{{ out.aid }}">编辑内容</a> | <a href="/article_history?aid={{ out.aid }}">历史记录</a></p>
+    <p><a href="/admin/editblog/{{ out.aid }}">编辑内容</a></p>
     {% else %}
 
     {% endif %}

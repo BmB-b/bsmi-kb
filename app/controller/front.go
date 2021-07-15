@@ -327,6 +327,71 @@ func (fc *FrontController) SearchCtr(c *gin.Context) {
 	return
 }
 
+
+func (fc *FrontController) ArticleHistoryCtr(c *gin.Context) {
+
+
+	_, username, isAdmin := UserPermissionCheckDefaultAllow(c)
+	c.Header("Cache-Control", "no-cache")
+
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
+	if err != nil {
+		common.Sugar.Info(err)
+	}
+	page -= 1
+	if page < 0 {
+		page = 0
+	}
+
+	prev_page := page
+	if prev_page < 1 {
+		prev_page = 1
+	}
+	next_page := page + 2
+	aid := c.DefaultQuery("aid", "")
+	common.Sugar.Info(aid)
+	if len(aid) <= 0 {
+		common.ShowMessage(c, &common.Msg{
+			Msg: "搜索关键字不能为空",
+		})
+		return
+	}
+
+	rpp := 20
+	offset := page * rpp
+
+	var blogDataList []model.ArticleHistory
+
+	result := common.NewDb.Where("aid = ?", aid).
+		Limit(rpp).
+		Offset(offset).
+		Order("id desc").
+		Find(&blogDataList)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		common.ShowMessage(c, &common.Msg{
+			Msg: "文章不存在",
+		})
+		return
+	}
+
+	c.HTML(200, "article_history_list.html",
+		common.Pongo2ContextWithVersion(pongo2.Context{
+			"siteName":        common.Config.Site_name,
+			"siteDescription": common.Config.Site_description,
+			"blogDataList":    blogDataList,
+
+			"getCateFromMap": getFuncGetCateFromMap(),
+			"categories":     category_service.GetCategories(),
+			"aid":        aid,
+			"username":       username.(string),
+			"isAdmin":       isAdmin.(string),
+			"prevPage":       fmt.Sprintf("%d", prev_page),
+			"nextPage":       fmt.Sprintf("%d", next_page),
+		}))
+	return
+}
+
 func (fc *FrontController) ViewAltCtr(c *gin.Context) {
 
 
@@ -362,6 +427,61 @@ func (fc *FrontController) CountViewCtr(c *gin.Context) {
 	c.Header("Cache-Control", "no-cache, no-store, no-transform, must-revalidate, private, max-age=0")
 	c.Header("Pragma", "no-cache")
 	c.String(http.StatusOK, fmt.Sprintf("document.getElementById('vct').innerHTML=%d", blogItem.Views))
+}
+
+
+func (fc *FrontController) ViewArticleHistoryCtr(c *gin.Context) {
+
+
+	_, username, isAdmin := UserPermissionCheckDefaultAllow(c)
+	c.Header("Cache-Control", "no-cache")
+	id := c.Param("id")
+
+	var blogItem model.ArticleHistory
+
+	result := common.NewDb.
+		Where("id = ?", id).
+		First(&blogItem)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		common.ShowMessage(c, &common.Msg{
+			Msg: "文章不存在",
+		})
+		return
+	}
+
+	var tagIds []int64
+
+	err := json.Unmarshal(blogItem.TagIds, &tagIds)
+	if err != nil {
+		common.Sugar.Info("解析标签失败")
+	}
+
+	c.HTML(200, "view_article_history.html",
+		common.Pongo2ContextWithVersion(pongo2.Context{
+			"title": blogItem.Title,
+			"siteName":        common.Config.Site_name,
+			"siteDescription": common.SubCutContent(blogItem.Content, 64),
+
+			"getCateFromMap": getFuncGetCateFromMap(),
+			"categories":     category_service.GetCategories(),
+			"username":       username.(string),
+			"isAdmin":       isAdmin.(string),
+
+			"tags": tag_service.BatchGetTagName(tagIds),
+			"out": map[string]string{
+				"aid":         fmt.Sprintf("%d", blogItem.Aid),
+				"cateName":    getFuncGetCateFromMap()(blogItem.CateId),
+				"cateId":      fmt.Sprintf("%d", blogItem.CateId),
+				"title":       blogItem.Title,
+				"content":     blogItem.Content,
+				"publishTime": blogItem.PublishTime,
+				"updateTime": blogItem.UpdateTime,
+				"username":    username.(string),
+			},
+		}))
+	return
+
 }
 
 func (fc *FrontController) ViewCtr(c *gin.Context) {
@@ -408,6 +528,7 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 				"title":       blogItem.Title,
 				"content":     blogItem.Content,
 				"publishTime": blogItem.PublishTime,
+				"updateTime": blogItem.UpdateTime,
 				"username":    username.(string),
 			},
 		}))

@@ -179,6 +179,13 @@ func SaveBlogEditCtr(c *gin.Context) {
 		return
 	}
 
+	loc, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		common.LogError(err)
+		common.ShowUMessage(c, &common.Umsg{Msg: "获取时间错误", Url: "/"})
+		return
+	}
+
 	var blogItem model.Article
 
 	result := common.NewDb.Find(&blogItem, BI.Aid)
@@ -191,6 +198,27 @@ func SaveBlogEditCtr(c *gin.Context) {
 	}
 
 
+	//保存 文章历史
+
+
+	ahItem := model.ArticleHistory{
+		Aid:           blogItem.Aid,
+		Title:         blogItem.Title,
+		Content:       blogItem.Content,
+		PublishTime:   blogItem.PublishTime,
+		UpdateTime:   blogItem.UpdateTime,
+		PublishStatus: 1,
+		CateId:        blogItem.CateId,
+		TagIds:        blogItem.TagIds,
+		PAid: blogItem.PAid,
+		SortId: blogItem.SortId,
+	}
+
+	_ = common.NewDb.Create(&ahItem)
+
+
+	//处理保存编辑帖子
+
 	tagIdStr, tagIds := processTags(BI.Tags)
 
 	blogItem.Aid = BI.Aid
@@ -199,6 +227,7 @@ func SaveBlogEditCtr(c *gin.Context) {
 	blogItem.Content = BI.Content
 	blogItem.TagIds = tagIdStr
 	blogItem.PAid = BI.PAid
+	blogItem.UpdateTime = time.Now().In(loc).Format("2006-01-02 15:04:05")
 	common.NewDb.
 		Where("aid = ?", blogItem.Aid).
 		Save(blogItem)
@@ -277,6 +306,7 @@ func SaveBlogAddCtr(c *gin.Context) {
 		Title:         BI.Title,
 		Content:       BI.Content,
 		PublishTime:   time.Now().In(loc).Format("2006-01-02 15:04:05"),
+		UpdateTime:   time.Now().In(loc).Format("2006-01-02 15:04:05"),
 		PublishStatus: 1,
 		CateId:        BI.CateId,
 		TagIds:        tagIdStr,

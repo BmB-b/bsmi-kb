@@ -137,6 +137,12 @@ func GetNewDb(config *AppConfig) *gorm.DB {
 		panic(err.Error())
 	}
 
+	err = db.AutoMigrate(&model.ArticleHistory{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
 
 	return db
 }

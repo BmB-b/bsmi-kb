@@ -1,6 +1,7 @@
 package model
 import  "gorm.io/datatypes"
-type Article struct {
+type ArticleHistory struct {
+	Id int64 `gorm:"primaryKey" json:"id"`
 	Aid int64 `json:"aid"`
 	CateId int64 `gorm:"default:0" json:"cate_id"`
 	Title string `json:"title"`
@@ -15,7 +16,7 @@ type Article struct {
 }
 
 
-func (Article) TableName()  string {
-	return "bk_article"
+func (ArticleHistory) TableName()  string {
+	return "bk_article_history"
 	
 }
