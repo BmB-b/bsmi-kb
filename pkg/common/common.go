@@ -180,7 +180,6 @@ func GetConfig() *AppConfig {
 
 var (
 	Config    *AppConfig
-	DB        *sql.DB
 	NewDb     *gorm.DB
 	Logger, _ = zap.NewProduction()
 	Sugar *zap.SugaredLogger
@@ -190,7 +189,6 @@ func InitApp() {
 	Config = GetConfig()
 //	gin.SetMode(Config.SrvMode)
 	gin.SetMode(gin.DebugMode)
-	//DB = GetDB(Config)
 	NewDb = GetNewDb(Config)
 	defer Logger.Sync()
 	Sugar = Logger.Sugar()

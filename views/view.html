@@ -8,8 +8,7 @@
     <p>
         分类: <a href="/?cateId={{ out.cateId }}">{{ out.cateName }}</a>
         标签: {% for tag in tags %} <a href="/?tagId={{ tag.ID }}">{{ tag.Name }}</a> {% endfor %}
-        发布于: {{ out.publishTime }}, 点击数: <span id="vct"></span>
-
+        发布于: {{ out.publishTime }}
     </p>
 
     {% if username != "" %}

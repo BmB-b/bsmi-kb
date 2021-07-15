@@ -51,7 +51,14 @@
             aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    <form action="/search" method="get" class="form-inline">
+        <div class="row g-3">
+            <div class="col-sm-7"><input name="keyword" class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"></div>
+           <div class="col"><button type="submit" class="btn btn-primary mb-2">搜索</button></div>
+        </div>
+    </form>
+
+
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">
 

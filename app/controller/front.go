@@ -310,7 +310,7 @@ func (fc *FrontController) SearchCtr(c *gin.Context) {
 		return
 	}
 
-	c.HTML(200, "index.html",
+	c.HTML(200, "search.html",
 		common.Pongo2ContextWithVersion(pongo2.Context{
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.Config.Site_description,
