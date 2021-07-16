@@ -10,8 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/zerolog/log"
+	"io/ioutil"
 )
 
+//go:generate go run cmd/version_info.go
 func main() {
 	common.InitApp()
 	r := gin.New()
@@ -20,6 +22,10 @@ func main() {
 		ContentType: "text/html; charset=utf-8",
 		AlwaysNoCache: true,
 	})
+
+
+	version_bytes, _ := ioutil.ReadFile("./public/version.js")
+	common.BsmiKbVersion = string(version_bytes)
 
 	r.Static("/assets", "./public/assets")
 	store := cookie.NewStore([]byte("gssecret"))

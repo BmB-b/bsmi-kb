@@ -1,4 +1,5 @@
 package version
 
-var BuildTag string
-var BuildNum string
+	var BuildTag  = "v1.2.0"
+	var BuildNum  = "202107161239"
+	

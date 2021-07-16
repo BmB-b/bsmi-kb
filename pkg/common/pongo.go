@@ -20,6 +20,7 @@ func Pongo2ContextWithVersion(ctx pongo2.Context) pongo2.Context {
 	outCtx := Pongo2ContextAppend(ctx, pongo2.Context{
 		"BuildTag": version.BuildTag,
 		"BuildNum": version.BuildNum,
+		"BsmiKbVersion": BsmiKbVersion,
 	})
 	return outCtx
 }

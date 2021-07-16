@@ -189,6 +189,7 @@ var (
 	NewDb     *gorm.DB
 	Logger, _ = zap.NewProduction()
 	Sugar *zap.SugaredLogger
+	BsmiKbVersion string
 )
 
 func InitApp() {
