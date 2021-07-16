@@ -39,6 +39,13 @@ a {
     }
 }
 
+
+.mgtop10 {
+    margin-top: 10px;
+}
+.mgtop6 {
+    margin-top: 6px;
+}
 .sidebar-sticky {
     position: relative;
     top: 0;
