@@ -153,6 +153,7 @@ type AppConfig struct {
 	Admin_password   string
 	Site_name        string
 	Site_description string
+	Site_url		 string
 	SrvMode string
 	ObjectStorage    struct {
 		Aws_access_key_id     string

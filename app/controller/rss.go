@@ -1,9 +1,10 @@
 package controller
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/pkg/common"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/feeds"
 	_ "github.com/mattn/go-sqlite3"
@@ -28,11 +29,13 @@ func (rss *RSS) Out(c *gin.Context) {
 		common.LogError(result.Error)
 		return
 	}
+	common.Sugar.Info(json.Marshal(c.Request))
+	hostname := common.Config.Site_url
 	now := time.Now()
 	feed := &feeds.Feed{
-		Title:       "HardCoder",
-		Link:        &feeds.Link{Href: "https://www.netroby.com"},
-		Description: "Opensource , linux, golang",
+		Title:       common.Config.Site_name,
+		Link:        &feeds.Link{Href: hostname},
+		Description: common.Config.Site_description,
 		Created:     now,
 	}
 	feed.Items = make([]*feeds.Item, 0)
@@ -41,7 +44,7 @@ func (rss *RSS) Out(c *gin.Context) {
 		itemTime, _ := time.Parse("2006-01-02 15:04:05", blog.PublishTime)
 		feed.Items = append(feed.Items, &feeds.Item{
 			Title:       blog.Title,
-			Link:        &feeds.Link{Href: fmt.Sprintf("https://www.netroby.com/view/%d", blog.Aid)},
+			Link:        &feeds.Link{Href: fmt.Sprintf("%s/#view/%d", hostname, blog.Aid)},
 			Description: blog.Content,
 			Created:     itemTime,
 		})

@@ -43,10 +43,12 @@ func main() {
 	r.GET("/demopongo", fc.DemoPongoCtr)
 	r.GET("/about", fc.AboutCtr)
 	r.GET("/view/:id", fc.ViewCtr)
+	//查看 文章历史记录的详情页面
 	r.GET("/view_article_history/:id", fc.ViewArticleHistoryCtr)
 	r.GET("/view.php", fc.ViewAltCtr)
 	r.GET("/ping", fc.PingCtr)
 	r.GET("/search", fc.SearchCtr)
+	//查看 文章历史记录的 列表页面
 	r.GET("/article_history", fc.ArticleHistoryCtr)
 	r.GET("/charge", fc.ChargeCtr)
 	r.GET("/user/logout", fc.LogoutCtr)
