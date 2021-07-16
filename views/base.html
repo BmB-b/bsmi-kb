@@ -45,7 +45,7 @@
 <body>
 
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">知识库</a><span id="update-info"></span>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">知识库</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
             data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -68,13 +68,14 @@
 
             {% if username != "" %}
             <div style="color:white">
-                欢迎 {{ username }} |
+                <span id="update-info"></span> 欢迎 {{ username }} |
                 <a href="/admin">管理后台</a> |
                 <a href="/admin/list-cate">分类</a> |
                 <a href="/admin/list-tag">标签</a> |
 
                 <a href="/admin/addblog">新建页面</a> |
                 <a href="/admin/addblog" id="add-sub-page">新建子页面</a> |
+
                 <a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
             </div>
             {% else %}
@@ -165,7 +166,7 @@
             let versionCompare1 = versionCompare(data.substr(1), current_bsmi_kb_version.substr(1));
             console.log("version compare result:" + versionCompare1);
             if (versionCompare1 > 0) {
-                $('#update-info').innerHTML="<a href=\"https://github.com/cnmade/bsmi-kb/releases/tag/" + data + "\">新</a>";
+                $('#update-info').html("<a href=\"https://github.com/cnmade/bsmi-kb/releases/tag/" + data + "\">更新</a>");
             }
         })
 
