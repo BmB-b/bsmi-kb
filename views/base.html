@@ -247,14 +247,22 @@
 
                 let parent_node = $(this).tree('getNodeById', new_paid);
 
+
+
                 console.log('parent node: ', parent_node);
+
+
+                if (parent_node == null) {
+                    parent_node = $tree.tree('getTree');
+                }
 
 
 
                 new_sort = parent_node.children;
+
+
                 console.log('new_paid', new_paid);
                 console.log('new_sort', new_sort);
-
 
                 console.log('parent childNodes data: ', JSON.stringify(parent_node.getData()));
 
