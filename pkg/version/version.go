@@ -1,5 +1,5 @@
 package version
 
 	var BuildTag  = "v1.3.0"
-	var BuildNum  = "202107161632"
+	var BuildNum  = "202107161650"
 	
