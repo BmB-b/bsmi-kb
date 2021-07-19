@@ -171,7 +171,7 @@
         })
 
 
-        $(window).on('hashchange', function () {
+        let handleHashChange = function () {
             let urlHash = window.location.hash;
             console.log('url hash: ' + urlHash);
             let articlId = 0;
@@ -185,7 +185,10 @@
             } else {
                 view_article(1);
             }
-        })
+        };
+        //刚进来，展示首页
+        handleHashChange();
+        $(window).on('hashchange', handleHashChange)
 
 
 
