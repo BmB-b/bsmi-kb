@@ -3,6 +3,7 @@ package common
 import (
 	"database/sql"
 	"github.com/cnmade/bsmi-kb/app/orm/model"
+	"github.com/cnmade/bsmi-kb/pkg/common/vo"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/grokify/html-strip-tags-go"
@@ -18,24 +19,6 @@ import (
 	"strings"
 	"time"
 )
-
-
-type Msg struct {
-	Msg string
-}
-type Umsg struct {
-	Msg string
-	Url string
-}
-
-type VBlogItem struct {
-	Aid            int
-	Title          sql.NullString
-	Content        sql.NullString
-	Publish_time   sql.NullString
-	Publish_status sql.NullInt64
-	Views          int
-}
 
 /**
  * Logging error
@@ -73,7 +56,7 @@ func CloseRowsDefer(rows *sql.Rows) {
 /*
 * ShowMessage with template
  */
-func ShowMessage(c *gin.Context, m *Msg) {
+func ShowMessage(c *gin.Context, m *vo.Msg) {
 
 	c.HTML(200, "message.html",
 		Pongo2ContextWithVersion(pongo2.Context{
@@ -84,7 +67,7 @@ func ShowMessage(c *gin.Context, m *Msg) {
 	return
 }
 
-func ShowUMessage(c *gin.Context, m *Umsg) {
+func ShowUMessage(c *gin.Context, m *vo.Umsg) {
 
 	c.HTML(200, "message.html",
 		Pongo2ContextWithVersion(pongo2.Context{
@@ -100,7 +83,7 @@ func GetMinutes() string {
 	return time.Now().Format("200601021504")
 }
 
-func GetNewDb(config *AppConfig) *gorm.DB {
+func GetNewDb(config *vo.AppConfig) *gorm.DB {
 
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
@@ -147,24 +130,7 @@ func GetNewDb(config *AppConfig) *gorm.DB {
 	return db
 }
 
-type AppConfig struct {
-	Dbdsn            string
-	Admin_user       string
-	Admin_password   string
-	Site_name        string
-	Site_description string
-	Site_url		 string
-	SrvMode string
-	ObjectStorage    struct {
-		Aws_access_key_id     string
-		Aws_secret_access_key string
-		Aws_region            string
-		Aws_bucket            string
-		Cdn_url               string
-	}
-}
-
-func GetConfig() *AppConfig {
+func GetConfig() *vo.AppConfig {
 	_cm := "GetConfig@pkg/common/common"
 	//TODO load config from cmd line argument
 	f, err := os.Open("./vol/config.toml")
@@ -176,7 +142,7 @@ func GetConfig() *AppConfig {
 	if err != nil {
 		panic(err)
 	}
-	var config AppConfig
+	var config vo.AppConfig
 	if err := toml.Unmarshal(buf, &config); err != nil {
 		Sugar.Infof(_cm + " error: %v", err)
 	}
@@ -186,7 +152,7 @@ func GetConfig() *AppConfig {
 
 
 var (
-	Config    *AppConfig
+	Config    *vo.AppConfig
 	NewDb     *gorm.DB
 	Logger, _ = zap.NewProduction()
 	Sugar *zap.SugaredLogger

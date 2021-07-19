@@ -2,26 +2,28 @@ package admincontroller
 
 import (
 	"bytes"
-	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	awsSession "github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/cnmade/bsmi-kb/app/orm/model"
+	"github.com/cnmade/bsmi-kb/pkg/common"
+	"github.com/cnmade/bsmi-kb/pkg/common/vo"
 	"github.com/disintegration/imaging"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/h2non/filetype"
 	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/gorm"
 	"image"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/cnmade/bsmi-kb/pkg/common"
-	"github.com/h2non/filetype"
+	"os"
+	"path/filepath"
 
 	"strconv"
 	"strings"
@@ -69,7 +71,7 @@ func ExportCtr(c *gin.Context) {
 		Find(&blogDataList)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -97,7 +99,7 @@ func Files(c *gin.Context) {
 	})
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{err.Error(), "/"})
+		common.ShowUMessage(c, &vo.Umsg{err.Error(), "/"})
 		return
 	}
 	s3o := s3.New(s)
@@ -134,6 +136,119 @@ func FileUpload(c *gin.Context) {
 		c.Redirect(301, "/admin/login")
 		return
 	}
+	if (common.Config.ObjectStorageType == 1) {
+
+		preFileName, done := UploadByLocalStorage(c)
+		if done {
+			return
+		}
+		c.JSON(200, gin.H{"location":  preFileName})
+	} else {
+
+		preFileName, done := UploadByAwsS3(c)
+		if done {
+			return
+		}
+		c.JSON(200, gin.H{"location": common.Config.ObjectStorage.Cdn_url + "/" + preFileName})
+	}
+}
+
+
+func UploadByLocalStorage(c *gin.Context) (string, bool) {
+
+
+	file, fileHeader, err := c.Request.FormFile("file")
+
+	if err != nil {
+		common.LogError(err)
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
+	loc, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		common.LogError(err)
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
+	prefix := time.Now().In(loc).Format("2006/01/02")
+
+	newFileName := time.Now().UnixNano()
+
+	body, err := ioutil.ReadAll(file)
+
+	kind, _ := filetype.Match(body)
+	if kind == filetype.Unknown {
+		common.LogInfo("未知文件类型")
+
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
+
+	common.LogInfoF("filetype was: %s", kind.Extension)
+
+	iiReadFile, err := fileHeader.Open()
+	if err != nil {
+		common.LogError(err)
+
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
+	imageInfo, _, err := image.DecodeConfig(iiReadFile)
+
+
+	if err != nil {
+		common.LogError(err)
+
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
+
+	if imageInfo.Width > MaxImgWidth {
+
+		reReadFile, err := fileHeader.Open()
+		src, err := imaging.Decode(reReadFile)
+		if err != nil {
+			common.LogError(err)
+
+			c.JSON(http.StatusBadRequest, "上传失败")
+			return "", true
+		}
+
+		src = imaging.Resize(src, MaxImgWidth, 0, imaging.Lanczos)
+		buf := new(bytes.Buffer)
+		imgFormat, err := imaging.FormatFromExtension(kind.Extension)
+		if err != nil {
+			common.LogError(err)
+			c.JSON(http.StatusBadRequest, "获取图片类型失败，上传失败")
+			return "", true
+		}
+		_ = imaging.Encode(buf, src, imgFormat)
+
+		body = buf.Bytes()
+	}
+
+	preFileName := fmt.Sprintf("/oss/%s/%s", prefix, strconv.FormatInt(newFileName, 10)+"."+kind.Extension)
+	writeToFileName := "./vol" + preFileName
+
+	common.Sugar.Infof("The writeToFileName: %+v", writeToFileName)
+	targetDirectory := filepath.Dir(writeToFileName)
+	if _, err := os.Stat(targetDirectory); os.IsNotExist(err) {
+		err := os.MkdirAll(targetDirectory, 755)
+		common.LogError(err)
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
+	err = ioutil.WriteFile(writeToFileName, body, 0755)
+
+	if err != nil {
+		common.LogError(err)
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
+	return preFileName, false
+}
+
+func UploadByAwsS3(c *gin.Context) (string, bool) {
 	s, err := awsSession.NewSession(&aws.Config{
 		Region:   aws.String(common.Config.ObjectStorage.Aws_region),
 		Endpoint: aws.String("https://s3.us-west-001.backblazeb2.com"),
@@ -147,7 +262,7 @@ func FileUpload(c *gin.Context) {
 	if err != nil {
 		common.LogError(err)
 		c.JSON(http.StatusBadRequest, "初始化失败，上传失败")
-		return
+		return "", true
 	}
 	s3o := s3.New(s)
 
@@ -156,13 +271,13 @@ func FileUpload(c *gin.Context) {
 	if err != nil {
 		common.LogError(err)
 		c.JSON(http.StatusBadRequest, "上传失败")
-		return
+		return "", true
 	}
 	loc, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		common.LogError(err)
 		c.JSON(http.StatusBadRequest, "上传失败")
-		return
+		return "", true
 	}
 	prefix := time.Now().In(loc).Format("2006/01/02")
 
@@ -175,7 +290,7 @@ func FileUpload(c *gin.Context) {
 		common.LogInfo("未知文件类型")
 
 		c.JSON(http.StatusBadRequest, "上传失败")
-		return
+		return "", true
 	}
 
 	common.LogInfoF("filetype was: %s", kind.Extension)
@@ -185,7 +300,7 @@ func FileUpload(c *gin.Context) {
 		common.LogError(err)
 
 		c.JSON(http.StatusBadRequest, "上传失败")
-		return
+		return "", true
 	}
 	imageInfo, _, _ := image.DecodeConfig(iiReadFile)
 
@@ -197,7 +312,7 @@ func FileUpload(c *gin.Context) {
 			common.LogError(err)
 
 			c.JSON(http.StatusBadRequest, "上传失败")
-			return
+			return "", true
 		}
 
 		src = imaging.Resize(src, MaxImgWidth, 0, imaging.Lanczos)
@@ -206,7 +321,7 @@ func FileUpload(c *gin.Context) {
 		if err != nil {
 			common.LogError(err)
 			c.JSON(http.StatusBadRequest, "获取图片类型失败，上传失败")
-			return
+			return "", true
 		}
 		_ = imaging.Encode(buf, src, imgFormat)
 
@@ -224,9 +339,9 @@ func FileUpload(c *gin.Context) {
 	if err != nil {
 		common.LogError(err)
 		c.JSON(http.StatusBadRequest, "上传失败")
-		return
+		return "", true
 	}
-	c.JSON(200, gin.H{"location": common.Config.ObjectStorage.Cdn_url + "/" + preFileName})
+	return preFileName, false
 }
 
 func LoginCtr(c *gin.Context) {
@@ -248,7 +363,7 @@ func LoginProcessCtr(c *gin.Context) {
 	err := c.MustBindWith(&form, binding.Form)
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{Msg: "登录失败"})
+		common.ShowUMessage(c, &vo.Umsg{Msg: "登录失败"})
 		return
 	}
 	session := sessions.Default(c)
@@ -267,7 +382,7 @@ func LoginProcessCtr(c *gin.Context) {
 		if err != nil {
 			common.LogError(err)
 		}
-		common.ShowUMessage(c, &common.Umsg{Msg: "登录失败", Url: "/"})
+		common.ShowUMessage(c, &vo.Umsg{Msg: "登录失败", Url: "/"})
 	}
 }
 

@@ -1,10 +1,11 @@
 package admincontroller
 
 import (
+	"errors"
 	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
-	"errors"
+	vo2 "github.com/cnmade/bsmi-kb/pkg/common/vo"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -25,15 +26,15 @@ func SaveEditCateCtr(c *gin.Context) {
 	err = c.MustBindWith(&BI, binding.Form)
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{Msg: err.Error(), Url: "javascript:history.go(-1)"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: err.Error(), Url: "javascript:history.go(-1)"})
 		return
 	}
 	if BI.CateId == 0 {
-		common.ShowUMessage(c, &common.Umsg{Msg: "分类未找到", Url: "javascript:history.go(-1)"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "分类未找到", Url: "javascript:history.go(-1)"})
 		return
 	}
 	if BI.Name == "" {
-		common.ShowUMessage(c, &common.Umsg{Msg: "分类名不能为空", Url: "javascript:history.go(-1)"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "分类名不能为空", Url: "javascript:history.go(-1)"})
 		return
 	}
 
@@ -42,7 +43,7 @@ func SaveEditCateCtr(c *gin.Context) {
 	result := common.NewDb.Find(&cate, BI.CateId)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -112,18 +113,18 @@ func SaveAddCateCtr(c *gin.Context) {
 	var BI vo.Category_vo
 	err  = c.MustBindWith(&BI, binding.Form)
 	if err != nil {
-		common.ShowUMessage(c, &common.Umsg{Msg: err.Error(), Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: err.Error(), Url: "/"})
 		common.LogError(err)
 		return
 	}
 	if BI.Name == "" {
-		common.ShowUMessage(c, &common.Umsg{Msg: "分类名称不能为空", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "分类名称不能为空", Url: "/"})
 		return
 	}
 	loc, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{Msg: "获取时间错误", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "获取时间错误", Url: "/"})
 		return
 	}
 	aid := getLastCateId()
@@ -143,7 +144,7 @@ func SaveAddCateCtr(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/admin/list-cate")
 	} else {
 		common.LogError(result.Error)
-		common.ShowUMessage(c, &common.Umsg{Msg: "失败", Url: "/admin/list-cate"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "失败", Url: "/admin/list-cate"})
 	}
 
 }
@@ -161,7 +162,7 @@ func EditCateCtr(c *gin.Context) {
 	result := common.NewDb.First(&cate, id)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return

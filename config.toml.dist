@@ -4,7 +4,8 @@ admin_password = "admin"
 site_name = "知识库"
 site_description = "Linux, opensource, golang"
 site_url = "http://localhost:8005"
-srvMode="release"
+srvMode="debug"
+object_storage_type = 1
 [object_storage]
 aws_access_key_id = "******"
 aws_secret_access_key = "******"

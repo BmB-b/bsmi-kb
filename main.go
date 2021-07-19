@@ -28,6 +28,8 @@ func main() {
 	common.BsmiKbVersion = string(version_bytes)
 
 	r.Static("/assets", "./public/assets")
+	r.Static("/oss", "./vol/oss")
+
 	store := cookie.NewStore([]byte("gssecret"))
 	store.Options(sessions.Options{
 		Path: "/",

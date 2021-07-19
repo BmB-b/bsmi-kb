@@ -4,6 +4,7 @@ import (
 	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
+	vo2 "github.com/cnmade/bsmi-kb/pkg/common/vo"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -48,18 +49,18 @@ func SaveAddTagCtr(c *gin.Context) {
 	var BI vo.Tag_vo
 	err  = c.MustBindWith(&BI, binding.Form)
 	if err != nil {
-		common.ShowUMessage(c, &common.Umsg{Msg: err.Error(), Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: err.Error(), Url: "/"})
 		common.LogError(err)
 		return
 	}
 	if BI.Name == "" {
-		common.ShowUMessage(c, &common.Umsg{Msg: "标签名称不能为空", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "标签名称不能为空", Url: "/"})
 		return
 	}
 	loc, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{Msg: "获取时间错误", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "获取时间错误", Url: "/"})
 		return
 	}
 	aid := getLastCateId()
@@ -79,7 +80,7 @@ func SaveAddTagCtr(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/admin/list-tag")
 	} else {
 		common.LogError(result.Error)
-		common.ShowUMessage(c, &common.Umsg{Msg: "失败", Url: "/admin/list-tag"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "失败", Url: "/admin/list-tag"})
 	}
 
 }

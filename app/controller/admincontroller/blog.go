@@ -9,6 +9,7 @@ import (
 	"github.com/cnmade/bsmi-kb/app/service/tag_service"
 	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
+	vo2 "github.com/cnmade/bsmi-kb/pkg/common/vo"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -32,15 +33,15 @@ func DeleteBlogCtr(c *gin.Context) {
 	err  = c.MustBindWith(&BI, binding.Form)
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{Msg: err.Error(), Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: err.Error(), Url: "/"})
 		return
 	} else {
 		if BI.Aid == 0 {
-			common.ShowUMessage(c, &common.Umsg{Msg: "文章未找到", Url: "/"})
+			common.ShowUMessage(c, &vo2.Umsg{Msg: "文章未找到", Url: "/"})
 			return
 		}
 		common.NewDb.Delete(&model.Article{}, BI.Aid)
-		common.ShowUMessage(c, &common.Umsg{Msg: "删除成功", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "删除成功", Url: "/"})
 	}
 }
 
@@ -80,7 +81,7 @@ func ListBlogCtr(c *gin.Context) {
 		Find(&blogDataList)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -112,7 +113,7 @@ func EditBlogCtr(c *gin.Context) {
 	result := common.NewDb.First(&blogItem, id)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -125,7 +126,7 @@ func EditBlogCtr(c *gin.Context) {
 
 	err = json.Unmarshal(blogItem.TagIds, &tagIds)
 	if err != nil {
-		common.Sugar.Info(" json decode error %+v", err)
+		common.Sugar.Infof(" json decode error %+v", err)
 	} else {
 		tmpTags := tag_service.BatchGetTagName(tagIds)
 		for _, vt := range tmpTags {
@@ -163,26 +164,26 @@ func SaveBlogEditCtr(c *gin.Context) {
 	err  = c.MustBindWith(&BI, binding.Form)
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{Msg: err.Error(), Url: "javascript:history.go(-1)"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: err.Error(), Url: "javascript:history.go(-1)"})
 		return
 	}
 	if BI.Aid == 0 {
-		common.ShowUMessage(c, &common.Umsg{Msg: "文章未找到", Url: "javascript:history.go(-1)"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "文章未找到", Url: "javascript:history.go(-1)"})
 		return
 	}
 	if BI.Title == "" {
-		common.ShowUMessage(c, &common.Umsg{Msg: "标题不能为空", Url: "javascript:history.go(-1)"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "标题不能为空", Url: "javascript:history.go(-1)"})
 		return
 	}
 	if BI.Content == "" {
-		common.ShowUMessage(c, &common.Umsg{Msg: "内容不能为空", Url: "javascript:history.go(-1)"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "内容不能为空", Url: "javascript:history.go(-1)"})
 		return
 	}
 
 	loc, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{Msg: "获取时间错误", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "获取时间错误", Url: "/"})
 		return
 	}
 
@@ -191,7 +192,7 @@ func SaveBlogEditCtr(c *gin.Context) {
 	result := common.NewDb.Find(&blogItem, BI.Aid)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -278,22 +279,22 @@ func SaveBlogAddCtr(c *gin.Context) {
 	var BI vo.Blog_vo
 	err = c.MustBindWith(&BI, binding.Form)
 	if err != nil {
-		common.ShowUMessage(c, &common.Umsg{Msg: err.Error(), Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: err.Error(), Url: "/"})
 		common.LogError(err)
 		return
 	}
 	if BI.Title == "" {
-		common.ShowUMessage(c, &common.Umsg{Msg: "标题不能为空", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "标题不能为空", Url: "/"})
 		return
 	}
 	if BI.Content == "" {
-		common.ShowUMessage(c, &common.Umsg{Msg: "内容不能为空", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "内容不能为空", Url: "/"})
 		return
 	}
 	loc, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		common.LogError(err)
-		common.ShowUMessage(c, &common.Umsg{Msg: "获取时间错误", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "获取时间错误", Url: "/"})
 		return
 	}
 	aid := getLastAid()
@@ -323,7 +324,7 @@ func SaveBlogAddCtr(c *gin.Context) {
 		c.Redirect(http.StatusFound, fmt.Sprintf("/#view/%d", nextAid))
 	} else {
 		common.LogError(result.Error)
-		common.ShowUMessage(c, &common.Umsg{Msg: "失败", Url: "/"})
+		common.ShowUMessage(c, &vo2.Umsg{Msg: "失败", Url: "/"})
 	}
 
 }

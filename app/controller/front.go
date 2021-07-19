@@ -10,6 +10,7 @@ import (
 	"github.com/cnmade/bsmi-kb/app/service/tag_service"
 	"github.com/cnmade/bsmi-kb/app/vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
+	vo2 "github.com/cnmade/bsmi-kb/pkg/common/vo"
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -198,7 +199,7 @@ func (fc *FrontController) HomeCtr(c *gin.Context) {
 	}
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -281,7 +282,7 @@ func (fc *FrontController) SearchCtr(c *gin.Context) {
 	keyword := c.DefaultQuery("keyword", "")
 	common.Sugar.Info(keyword)
 	if len(keyword) <= 0 {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "搜索关键字不能为空",
 		})
 		return
@@ -304,7 +305,7 @@ func (fc *FrontController) SearchCtr(c *gin.Context) {
 		Find(&blogDataList)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -351,7 +352,7 @@ func (fc *FrontController) ArticleHistoryCtr(c *gin.Context) {
 	aid := c.DefaultQuery("aid", "")
 	common.Sugar.Info(aid)
 	if len(aid) <= 0 {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "搜索关键字不能为空",
 		})
 		return
@@ -369,7 +370,7 @@ func (fc *FrontController) ArticleHistoryCtr(c *gin.Context) {
 		Find(&blogDataList)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -413,7 +414,7 @@ func (fc *FrontController) CountViewCtr(c *gin.Context) {
 	result := common.NewDb.First(&blogItem, id)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -444,7 +445,7 @@ func (fc *FrontController) ViewArticleHistoryCtr(c *gin.Context) {
 		First(&blogItem)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -496,7 +497,7 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 	result := common.NewDb.First(&blogItem, id)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		common.ShowMessage(c, &common.Msg{
+		common.ShowMessage(c, &vo2.Msg{
 			Msg: "文章不存在",
 		})
 		return
@@ -536,7 +537,7 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 
 }
 
-func (fc *FrontController) checkNeedCharge(c *gin.Context, blog common.VBlogItem) bool {
+func (fc *FrontController) checkNeedCharge(c *gin.Context, blog vo.VBlogItem) bool {
 	ttformat := "2006-01-02 15:04:05"
 	t2, _ := time.Parse(ttformat, blog.Publish_time.String)
 
