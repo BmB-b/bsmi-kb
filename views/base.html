@@ -183,7 +183,9 @@
             if (articlId > 0) {
                 view_article(articlId)
             } else {
-                view_article(1);
+                if (urlHash.length <= 0) {
+                    view_article(1);
+                }
             }
         };
         //刚进来，展示首页
