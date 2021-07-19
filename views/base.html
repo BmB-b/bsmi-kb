@@ -171,19 +171,23 @@
         })
 
 
-        let urlHash = window.location.hash;
-        console.log('url hash: ' + urlHash);
-        let articlId = 0;
+        $(window).on('hashchange', function () {
+            let urlHash = window.location.hash;
+            console.log('url hash: ' + urlHash);
+            let articlId = 0;
 
-        if (urlHash.length > 6) {
-            articlId = urlHash.substr(6);
-        }
+            if (urlHash.length > 6) {
+                articlId = urlHash.substr(6);
+            }
 
-        if (articlId > 0) {
-            view_article(articlId)
-        } else {
-            view_article(1);
-        }
+            if (articlId > 0) {
+                view_article(articlId)
+            } else {
+                view_article(1);
+            }
+        })
+
+
 
 
         var $tree = $('#tree1');
