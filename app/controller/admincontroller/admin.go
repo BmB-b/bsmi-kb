@@ -17,6 +17,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/h2non/filetype"
+	gonanoid "github.com/matoous/go-nanoid"
 	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/gorm"
 	"image"
@@ -25,7 +26,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"strconv"
 	"strings"
 	"time"
 )
@@ -38,8 +38,7 @@ type AdminLoginForm struct {
 	Password string `form:"password" binding:"required"`
 }
 
-
-func AdminPermissionCheck(c *gin.Context) (  err error, username interface{}, isAdmin interface{}) {
+func AdminPermissionCheck(c *gin.Context) (err error, username interface{}, isAdmin interface{}) {
 	session := sessions.Default(c)
 	username = session.Get("username")
 	isAdmin = session.Get("isAdmin")
@@ -56,6 +55,7 @@ func AdminPermissionCheck(c *gin.Context) (  err error, username interface{}, is
 	}
 	return nil, username, isAdmin
 }
+
 // Export
 func ExportCtr(c *gin.Context) {
 	err, _, _ := AdminPermissionCheck(c)
@@ -123,7 +123,7 @@ func Files(c *gin.Context) {
 			"siteDescription": common.Config.Site_description,
 			"cdnurl":          common.Config.ObjectStorage.Cdn_url,
 			"username":        username.(string),
-			"isAdmin": isAdmin.(string),
+			"isAdmin":         isAdmin.(string),
 		}))
 	return
 }
@@ -136,13 +136,13 @@ func FileUpload(c *gin.Context) {
 		c.Redirect(301, "/admin/login")
 		return
 	}
-	if (common.Config.ObjectStorageType == 1) {
+	if common.Config.ObjectStorageType == 1 {
 
 		preFileName, done := UploadByLocalStorage(c)
 		if done {
 			return
 		}
-		c.JSON(200, gin.H{"location":  preFileName})
+		c.JSON(200, gin.H{"location": preFileName})
 	} else {
 
 		preFileName, done := UploadByAwsS3(c)
@@ -153,9 +153,7 @@ func FileUpload(c *gin.Context) {
 	}
 }
 
-
 func UploadByLocalStorage(c *gin.Context) (string, bool) {
-
 
 	file, fileHeader, err := c.Request.FormFile("file")
 
@@ -172,7 +170,14 @@ func UploadByLocalStorage(c *gin.Context) (string, bool) {
 	}
 	prefix := time.Now().In(loc).Format("2006/01/02")
 
-	newFileName := time.Now().UnixNano()
+	//newFileName := time.Now().UnixNano()
+	newFileName, err := gonanoid.Nanoid(20)
+	if err != nil {
+
+		common.LogError(err)
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
 
 	body, err := ioutil.ReadAll(file)
 
@@ -194,7 +199,6 @@ func UploadByLocalStorage(c *gin.Context) (string, bool) {
 		return "", true
 	}
 	imageInfo, _, err := image.DecodeConfig(iiReadFile)
-
 
 	if err != nil {
 		common.LogError(err)
@@ -227,7 +231,7 @@ func UploadByLocalStorage(c *gin.Context) (string, bool) {
 		body = buf.Bytes()
 	}
 
-	preFileName := fmt.Sprintf("/oss/%s/%s", prefix, strconv.FormatInt(newFileName, 10)+"."+kind.Extension)
+	preFileName := fmt.Sprintf("/oss/%s/%s", prefix, newFileName +"."+kind.Extension)
 	writeToFileName := "./vol" + preFileName
 
 	common.Sugar.Infof("The writeToFileName: %+v", writeToFileName)
@@ -283,8 +287,14 @@ func UploadByAwsS3(c *gin.Context) (string, bool) {
 	}
 	prefix := time.Now().In(loc).Format("2006/01/02")
 
-	newFileName := time.Now().UnixNano()
+	//newFileName := time.Now().UnixNano()
+	newFileName, err := gonanoid.Nanoid(20)
+	if err != nil {
 
+		common.LogError(err)
+		c.JSON(http.StatusBadRequest, "上传失败")
+		return "", true
+	}
 	body, err := ioutil.ReadAll(file)
 
 	kind, _ := filetype.Match(body)
@@ -330,7 +340,7 @@ func UploadByAwsS3(c *gin.Context) (string, bool) {
 		body = buf.Bytes()
 	}
 
-	preFileName := fmt.Sprintf("%s/%s", prefix, strconv.FormatInt(newFileName, 10)+"."+kind.Extension)
+	preFileName := fmt.Sprintf("%s/%s", prefix, newFileName +"."+kind.Extension)
 	params := &s3.PutObjectInput{
 		Bucket:      aws.String(common.Config.ObjectStorage.Aws_bucket),
 		Key:         aws.String(preFileName),
