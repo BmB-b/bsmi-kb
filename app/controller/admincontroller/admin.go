@@ -234,9 +234,11 @@ func UploadByLocalStorage(c *gin.Context) (string, bool) {
 	targetDirectory := filepath.Dir(writeToFileName)
 	if _, err := os.Stat(targetDirectory); os.IsNotExist(err) {
 		err := os.MkdirAll(targetDirectory, 755)
-		common.LogError(err)
-		c.JSON(http.StatusBadRequest, "上传失败")
-		return "", true
+		if err != nil {
+			common.LogError(err)
+			c.JSON(http.StatusBadRequest, "上传失败")
+			return "", true
+		}
 	}
 	err = ioutil.WriteFile(writeToFileName, body, 0755)
 
