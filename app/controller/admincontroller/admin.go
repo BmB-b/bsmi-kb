@@ -371,6 +371,13 @@ func LoginCtr(c *gin.Context) {
 }
 
 func LoginProcessCtr(c *gin.Context) {
+	hcaptchaResp := common.HCaptchClient.SiteVerify(c.Request)
+	if !hcaptchaResp.Success  {
+
+		common.Sugar.Errorf("error: %+v", hcaptchaResp)
+		common.ShowUMessage(c, &vo.Umsg{Msg: "登录失败,验证码不对"})
+		return
+	}
 	var form AdminLoginForm
 	err := c.MustBindWith(&form, binding.Form)
 	if err != nil {

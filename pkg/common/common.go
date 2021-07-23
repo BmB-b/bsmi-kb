@@ -7,6 +7,7 @@ import (
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/grokify/html-strip-tags-go"
+	"github.com/kataras/hcaptcha"
 	"github.com/naoina/toml"
 	"github.com/ztrue/tracerr"
 	"go.uber.org/zap"
@@ -58,7 +59,7 @@ func CloseRowsDefer(rows *sql.Rows) {
  */
 func ShowMessage(c *gin.Context, m *vo.Msg) {
 
-	c.HTML(200, "message.html",
+	c.HTML(200, "message-traditional.html",
 		Pongo2ContextWithVersion(pongo2.Context{
 			"siteName":        Config.Site_name,
 			"siteDescription": Config.Site_description,
@@ -69,7 +70,7 @@ func ShowMessage(c *gin.Context, m *vo.Msg) {
 
 func ShowUMessage(c *gin.Context, m *vo.Umsg) {
 
-	c.HTML(200, "message.html",
+	c.HTML(200, "message-traditional.html",
 		Pongo2ContextWithVersion(pongo2.Context{
 			"siteName":        Config.Site_name,
 			"siteDescription": Config.Site_description,
@@ -157,6 +158,7 @@ var (
 	Logger, _ = zap.NewProduction()
 	Sugar *zap.SugaredLogger
 	BsmiKbVersion string
+	HCaptchClient *hcaptcha.Client
 )
 
 func InitApp() {
@@ -166,6 +168,8 @@ func InitApp() {
 	NewDb = GetNewDb(Config)
 	defer Logger.Sync()
 	Sugar = Logger.Sugar()
+
+	HCaptchClient = hcaptcha.New(Config.HCaptchaSecretKey)
 }
 
 func OutPutHtml( c *gin.Context, s string) {

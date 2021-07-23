@@ -6,6 +6,8 @@ site_description = "Linux, opensource, golang"
 site_url = "http://localhost:8005"
 srvMode="debug"
 object_storage_type = 1
+h_captcha_site_key= ""
+h_captcha_secret_key=""
 [object_storage]
 aws_access_key_id = "******"
 aws_secret_access_key = "******"

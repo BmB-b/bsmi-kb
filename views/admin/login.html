@@ -2,6 +2,7 @@
 {% block title %}知识库-BSMI{% endblock %}
 
 {% block content %}
+<script src="https://hcaptcha.com/1/api.js" async defer></script>
 
 <style>
     .container {
@@ -29,6 +30,11 @@
             <tr>
                 <td>密码:</td>
                 <td><input type="password" name="password"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>    <div class="h-captcha" data-sitekey="{{ SiteKey }}"></div>
+                </td>
             </tr>
             <tr>
                 <td></td>
