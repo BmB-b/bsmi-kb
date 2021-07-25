@@ -23,6 +23,15 @@ func (rss *RSS) Alter(c *gin.Context) {
 // Out Render and output RSS
 //TODO 增加缓存
 func (rss *RSS) Out(c *gin.Context) {
+
+	_, username, _ := UserPermissionCheckDefaultAllow(c)
+	if common.Config.PrivateMode == 1 {
+
+		if username == "" {
+			c.Redirect(301, "/admin/login")
+			return
+		}
+	}
 	var blogItems []model.Article
 	result := common.NewDb.Limit(20).Order("aid desc").Find(&blogItems)
 	if result.Error != nil {

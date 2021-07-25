@@ -11,6 +11,7 @@ captcha_enabled=0
 h_captcha_site_key= ""
 h_captcha_secret_key=""
 two_auth_type=2# 1 smtp, 2 mailgun
+private_mode=0
 [object_storage]
 aws_access_key_id = "******"
 aws_secret_access_key = "******"

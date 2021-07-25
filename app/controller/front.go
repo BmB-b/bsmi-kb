@@ -142,8 +142,14 @@ func (fc *FrontController) ListTagCtr(c *gin.Context) {
 
 func (fc *FrontController) HomeCtr(c *gin.Context) {
 
-
 	_, username, isAdmin := UserPermissionCheckDefaultAllow(c)
+	if common.Config.PrivateMode == 1 {
+
+		if username == "" {
+			c.Redirect(301, "/admin/login")
+			return
+		}
+	}
 		c.Header("Cache-Control", "no-cache")
 
 	cateId := c.DefaultQuery("cateId", "")

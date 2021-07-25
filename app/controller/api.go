@@ -23,6 +23,14 @@ type apiBlogList struct {
 
 func (a *Api) NavAll(c *gin.Context) {
 
+	_, username, _ := UserPermissionCheckDefaultAllow(c)
+	if common.Config.PrivateMode == 1 {
+
+		if username == "" {
+			c.Redirect(301, "/admin/login")
+			return
+		}
+	}
 	var articleList []model.Article
 	common.NewDb.Where("p_aid = 0").
 		Order("sort_id asc").
@@ -40,6 +48,15 @@ func (a *Api) NavAll(c *gin.Context) {
 }
 
 func (a *Api) NavLoad(c *gin.Context) {
+
+	_, username, _ := UserPermissionCheckDefaultAllow(c)
+	if common.Config.PrivateMode == 1 {
+
+		if username == "" {
+			c.Redirect(301, "/admin/login")
+			return
+		}
+	}
 	rawAid := c.Query("node")
 	if rawAid == "" {
 		c.JSON(http.StatusOK, []string{})
@@ -75,6 +92,11 @@ func (a *Api) NavLoad(c *gin.Context) {
 
 func (a *Api) Resort(c *gin.Context) {
 
+	_, username, _ := UserPermissionCheckDefaultAllow(c)
+		if username == "" {
+			c.Redirect(301, "/admin/login")
+			return
+		}
 	var req vo.Resort_req
 
 	err := c.ShouldBindJSON(&req)

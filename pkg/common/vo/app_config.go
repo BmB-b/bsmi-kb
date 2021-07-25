@@ -14,6 +14,7 @@ type AppConfig struct {
 	HCaptchaSiteKey	string
 	HCaptchaSecretKey string
 	TwoAuthType uint
+	PrivateMode uint
 	ObjectStorage    struct {
 		Aws_access_key_id     string
 		Aws_secret_access_key string
