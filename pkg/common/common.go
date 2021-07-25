@@ -134,6 +134,13 @@ func GetNewDb(config *vo.AppConfig) *gorm.DB {
 	}
 
 
+	err = db.AutoMigrate(&model.FailBan{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+
 	return db
 }
 
