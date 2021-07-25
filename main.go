@@ -3,19 +3,29 @@ package main
 import (
 	. "github.com/cnmade/bsmi-kb/app/controller"
 	"github.com/cnmade/bsmi-kb/app/controller/admincontroller"
+	"github.com/cnmade/bsmi-kb/app/service/backup_service"
 	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/cnmade/pongo2gin"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"github.com/go-co-op/gocron"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/zerolog/log"
 	"io/ioutil"
+	"time"
 )
 
 //go:generate go run cmd/version_info.go
 func main() {
 	common.InitApp()
+
+	//启动的时候，执行一次备份
+	go backup_service.DoBackup()
+	s := gocron.NewScheduler(time.UTC)
+
+	s.Cron("5 5 */3 * *").Do(backup_service.DoBackup)
+
 	r := gin.New()
 	r.HTMLRender = pongo2gin.New(pongo2gin.RenderOptions{
 		TemplateDir: "views",

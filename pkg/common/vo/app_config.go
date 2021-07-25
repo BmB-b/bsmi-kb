@@ -33,5 +33,9 @@ type AppConfig struct {
 		Domain string
 		ApiKey string
 	}
+	BackupConfig struct {
+		BackupEnabled uint
+		BackupDir string
+	}
 }
 
