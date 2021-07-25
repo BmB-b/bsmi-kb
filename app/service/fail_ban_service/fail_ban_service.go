@@ -39,6 +39,11 @@ func BanIp(clientIp string)  {
 	}
 }
 
+func ClearBan(arg1 string) {
+	common.NewDb.Session(&gorm.Session{AllowGlobalUpdate: true}).Delete(&model.FailBan{})
+
+}
+
 func CleanIp(clientIp string) string {
 	if strings.ContainsAny(clientIp, ":") {
 		sidx := strings.Index(clientIp, ":")

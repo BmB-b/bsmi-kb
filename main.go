@@ -4,6 +4,7 @@ import (
 	. "github.com/cnmade/bsmi-kb/app/controller"
 	"github.com/cnmade/bsmi-kb/app/controller/admincontroller"
 	"github.com/cnmade/bsmi-kb/app/service/backup_service"
+	"github.com/cnmade/bsmi-kb/app/service/fail_ban_service"
 	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/cnmade/pongo2gin"
 	"github.com/gin-contrib/sessions"
@@ -13,12 +14,30 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/zerolog/log"
 	"io/ioutil"
+	"os"
 	"time"
 )
 
 //go:generate go run cmd/version_info.go
 func main() {
 	common.InitApp()
+
+	common.Sugar.Infof("os.Args len: %d", len(os.Args))
+	if len(os.Args) > 1 {
+		cliArgs := os.Args[1]
+		cliArgs1 := ""
+		if len(os.Args) > 2 {
+
+			cliArgs1 = os.Args[2]
+		}
+
+		switch (cliArgs) {
+		case "clearban":
+			fail_ban_service.ClearBan(cliArgs1)
+			return
+
+		}
+	}
 
 	//启动的时候，执行一次备份
 	go backup_service.DoBackup()
