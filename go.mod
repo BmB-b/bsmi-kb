@@ -9,6 +9,7 @@ require (
 	github.com/flosch/pongo2/v4 v4.0.2
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.7.2
+	github.com/go-mail/mail v2.3.1+incompatible // indirect
 	github.com/gorilla/feeds v1.1.1
 	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.1
@@ -29,6 +30,7 @@ require (
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gorm.io/datatypes v1.0.1
 	gorm.io/driver/sqlite v1.1.4
 	gorm.io/gorm v1.21.11

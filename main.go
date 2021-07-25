@@ -61,6 +61,7 @@ func main() {
 		admin.GET("/", admincontroller.ListBlogCtr)
 		admin.GET("/login", admincontroller.LoginCtr)
 		admin.POST("/login-process", admincontroller.LoginProcessCtr)
+		admin.POST("/loginStep3", admincontroller.LoginStep3Ctr)
 		admin.GET("/logout", admincontroller.LogoutCtr)
 		admin.GET("/addblog", admincontroller.AddBlogCtr)
 		admin.POST("/save-blog-add", admincontroller.SaveBlogAddCtr)

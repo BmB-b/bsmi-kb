@@ -22,6 +22,7 @@ func Pongo2ContextWithVersion(ctx pongo2.Context) pongo2.Context {
 		"BuildNum": version.BuildNum,
 		"BsmiKbVersion": BsmiKbVersion,
 		"SiteKey": Config.HCaptchaSiteKey,
+		"CaptchaEnabled": Config.CaptchaEnabled,
 	})
 	return outCtx
 }
