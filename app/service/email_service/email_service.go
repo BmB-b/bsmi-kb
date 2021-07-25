@@ -7,15 +7,16 @@ import (
 )
 
 func SendTwoAuth(ToEmail string, KeyB string) {
+	emailConfig := common.Config.EmailConfig
 	d := mail.NewDialer(
-		common.Config.EmailConfig.SmtpHost,
-		common.Config.EmailConfig.SmtpPort,
-		common.Config.EmailConfig.SmtpUser,
-		common.Config.EmailConfig.SmtpPassword,
+		emailConfig.SmtpHost,
+		emailConfig.SmtpPort,
+		emailConfig.SmtpUser,
+		emailConfig.SmtpPassword,
 	)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	m := mail.NewMessage()
-	m.SetHeader("From", "postmaster@sandbox9c08d31eb85441448981f19fec977ee3.mailgun.org")
+	m.SetHeader("From", emailConfig.FromEmail)
 	m.SetHeader("To", ToEmail)
 	m.SetHeader("Subject", "两步登陆验证")
 	m.SetBody("text/html", "您的两步登录验证码为：" + KeyB )

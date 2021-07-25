@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/cnmade/bsmi-kb/app/orm/model"
 	"github.com/cnmade/bsmi-kb/app/service/email_service"
+	"github.com/cnmade/bsmi-kb/app/service/mailgun_service"
 	"github.com/cnmade/bsmi-kb/app/vo/login_vo"
 	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/cnmade/bsmi-kb/pkg/common/vo"
@@ -396,7 +397,14 @@ func LoginProcessCtr(c *gin.Context) {
 		keyA, _ := gonanoid.Nanoid(20)
 		keyB, _ := gonanoid.Nanoid(20)
 
-		email_service.SendTwoAuth(common.Config.AdminEmail, keyB)
+		switch common.Config.TwoAuthType {
+		case 1:
+			email_service.SendTwoAuth(common.Config.AdminEmail, keyB)
+			break;
+		case 2:
+			mailgun_service.SendTwoAuth(common.Config.AdminEmail, keyB)
+			break;
+		}
 
 		loc, _ := time.LoadLocation("Asia/Shanghai")
 		var item model.TwoAuth

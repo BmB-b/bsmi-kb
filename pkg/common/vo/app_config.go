@@ -13,6 +13,7 @@ type AppConfig struct {
 	CaptchaEnabled uint
 	HCaptchaSiteKey	string
 	HCaptchaSecretKey string
+	TwoAuthType uint
 	ObjectStorage    struct {
 		Aws_access_key_id     string
 		Aws_secret_access_key string
@@ -21,10 +22,16 @@ type AppConfig struct {
 		Cdn_url               string
 	}
 	EmailConfig struct {
+		FromEmail string
 		SmtpHost string
 		SmtpPort int
 		SmtpUser string
 		SmtpPassword string
+	}
+	MailgunConfig struct {
+		FromEmail string
+		Domain string
+		ApiKey string
 	}
 }
 
