@@ -509,6 +509,14 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 		return
 	}
 
+	// 把上级的id找出来
+
+	pidList := []string{strconv.FormatInt(blogItem.Aid, 10)}
+	if blogItem.PAid > 0 {
+		pidList = getPidList(blogItem.PAid, pidList)
+	}
+
+
 	var tagIds []int64
 
 	err := json.Unmarshal(blogItem.TagIds, &tagIds)
@@ -521,7 +529,7 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 		    "title": blogItem.Title,
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.SubCutContent(blogItem.Content, 64),
-
+			"pidList": strings.Join(pidList, ","),
 			"getCateFromMap": getFuncGetCateFromMap(),
 			"categories":     category_service.GetCategories(),
 			"username":       username.(string),
@@ -541,6 +549,25 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 		}))
 	return
 
+}
+
+func getPidList(aid int64, pidList []string) []string {
+
+	var blogItem model.Article
+
+	pid := aid
+
+
+	for pid > 0 {
+
+		 common.NewDb.First(&blogItem, pid)
+		 pid = blogItem.PAid
+
+		 if (blogItem.Aid > 0) {
+		 	 pidList = append(pidList, strconv.FormatInt(blogItem.Aid, 10))
+		 }
+	}
+	return pidList
 }
 
 func (fc *FrontController) checkNeedCharge(c *gin.Context, blog vo.VBlogItem) bool {

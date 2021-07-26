@@ -37,8 +37,10 @@
     <link href="/assets/css/jqtree.css?_={{ BuildNum }}" rel="stylesheet">
     <script src="//cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="/assets/js/tree.jquery.js?_={{ BuildNum }}"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.1.0/build/styles/default.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.1.0/build/styles/atom-one-light.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.1.0/build/styles/default.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.1.0/build/styles/atom-one-light.min.css">
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.1.0/build/highlight.min.js"></script>
 
 </head>
@@ -54,11 +56,12 @@
     <form action="/search" method="get" class="form-inline">
         <div class="row g-3">
             <div class="col-sm-7">
-                <input name="keyword" class="form-control form-control-dark w-100" type="text" placeholder="输入关键字搜索" aria-label="Search">
+                <input name="keyword" class="form-control form-control-dark w-100" type="text" placeholder="输入关键字搜索"
+                       aria-label="Search">
             </div>
-           <div class="col">
-               <button type="submit" class="btn btn-secondary mb-2 mgtop6">搜索</button>
-           </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary mb-2 mgtop6">搜索</button>
+            </div>
         </div>
     </form>
 
@@ -134,11 +137,9 @@
 
             if (v1parts[i] == v2parts[i]) {
                 continue;
-            }
-            else if (v1parts[i] > v2parts[i]) {
+            } else if (v1parts[i] > v2parts[i]) {
                 return 1;
-            }
-            else {
+            } else {
                 return -1;
             }
         }
@@ -153,13 +154,53 @@
     function view_article(aid) {
         $("#add-sub-page").attr("href", "/admin/addblog?paid=" + aid);
         $.get("/view/" + aid, function (data) {
-            $('#content').html(data);
-        });
+                $('#content').html(data);
+                console.log("pidList:", pidList)
+
+
+                if (pidList.length > 0) {
+                    i = pidList.length - 1;
+
+                    recursiveOpenNode(pidList, i);
+                }
+            }
+        );
+
+    }
+
+    function recursiveOpenNode(pidList, i) {
+
+        console.log("i was: ", i);
+        var twr = $('#tree1');
+        var tnid = pidList[i];
+        var tnode = twr.tree('getNodeById', tnid);
+        console.log(tnode)
+
+        if (tnode != null) {
+
+            if (i == 0) {
+                twr.tree('selectNode', tnode);
+            }
+            twr.tree('openNode', tnode, function (cn) {
+                console.log('node ' + cn.name + " opened");
+            })
+            window.setTimeout(function() {
+
+                console.log(tnode.is_open);
+
+                i=i-1;
+                if (i>=0) {
+                    recursiveOpenNode(pidList, i);
+                }
+            }, 10);
+
+
+        }
     }
 
     var current_bsmi_kb_version = "{{ BsmiKbVersion }}";
     //dom ready
-    $(function() {
+    $(function () {
 
         $.get("https://raw.githubusercontent.com/cnmade/bsmi-kb/master/public/version.js", function (data) {
             console.log("My version:" + current_bsmi_kb_version + ", remote version: " + data);
@@ -188,11 +229,7 @@
                 }
             }
         };
-        //刚进来，展示首页
-        handleHashChange();
         $(window).on('hashchange', handleHashChange)
-
-
 
 
         var $tree = $('#tree1');
@@ -204,8 +241,8 @@
                     openedIcon: $('<span>-</span> '),
                     showEmptyFolder: true,
                     data: data,
+                    //autoOpen: false,
                     autoOpen: 1,
-                    //  autoOpen: 1,
                     dragAndDrop: true,
                     onCreateLi: function (node, $li) {
                         // Append a link to the jqtree-element div.
@@ -215,6 +252,9 @@
                         );
                     }
                 });
+
+                //刚进来，展示首页
+                handleHashChange();
             }
         );
 
@@ -257,14 +297,12 @@
                 let parent_node = $(this).tree('getNodeById', new_paid);
 
 
-
                 console.log('parent node: ', parent_node);
 
 
                 if (parent_node == null) {
                     parent_node = $tree.tree('getTree');
                 }
-
 
 
                 new_sort = parent_node.children;
@@ -274,7 +312,6 @@
                 console.log('new_sort', new_sort);
 
                 console.log('parent childNodes data: ', JSON.stringify(parent_node.getData()));
-
 
 
                 let psort = "";
