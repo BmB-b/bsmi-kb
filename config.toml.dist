@@ -1,7 +1,7 @@
 dbdsn="file:./vol/db.sqlite"
 admin_user = "admin"
 admin_password = "admin"
-admin_email = "hufeng1987@gmail.com"
+admin_email = "yourname@domain.com"
 site_name = "知识库"
 site_description = "Linux, opensource, golang"
 site_url = "http://localhost:8005"
