@@ -184,15 +184,23 @@
             twr.tree('openNode', tnode, function (cn) {
                 console.log('node ' + cn.name + " opened");
             })
-            window.setTimeout(function() {
+            if (tnode.is_open != null) {
 
-                console.log(tnode.is_open);
-
-                i=i-1;
-                if (i>=0) {
+                i = i - 1;
+                if (i >= 0) {
                     recursiveOpenNode(pidList, i);
                 }
-            }, 10);
+            } else {
+                window.setTimeout(function () {
+
+                    console.log(tnode.is_open);
+
+                    i = i - 1;
+                    if (i >= 0) {
+                        recursiveOpenNode(pidList, i);
+                    }
+                }, 250);
+            }
 
 
         }
