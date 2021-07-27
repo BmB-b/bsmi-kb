@@ -24,5 +24,11 @@ func Pongo2ContextWithVersion(ctx pongo2.Context) pongo2.Context {
 		"SiteKey": Config.HCaptchaSiteKey,
 		"CaptchaEnabled": Config.CaptchaEnabled,
 	})
+
+	if Config.TongjiConfig.TongjiEnabled == 1 {
+		outCtx = Pongo2ContextAppend(outCtx, pongo2.Context{
+			"TongjiCode": Config.TongjiConfig.TongjiCode,
+		})
+	}
 	return outCtx
 }

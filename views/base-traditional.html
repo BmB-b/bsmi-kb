@@ -5,6 +5,7 @@
     <title>{{ title }} {{ siteName }}</title>
     <meta name="description" content="{{ siteDescription }}"/>
     {% include "common/ga.html" %}
+    {{ TongjiCode|safe }}
 </head>
 <body>
 <header class="navbar navbar-static-top navbar-inverse" id="top" role="banner">

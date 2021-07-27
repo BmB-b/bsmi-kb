@@ -31,3 +31,17 @@ api_key=""
 [backup_config]
 backup_enabled=1
 backup_dir="d:/backup"
+[tongji_config]
+tongji_enabled=1
+tongji_code='''
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.async = true;
+        hm.src = "https://hm.baidu.com/hm.js?8b2a3c485d93157132004c2e990b9892";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+'''

@@ -38,5 +38,9 @@ type AppConfig struct {
 		BackupEnabled uint
 		BackupDir string
 	}
+	TongjiConfig struct {
+		TongjiEnabled uint
+		TongjiCode	string
+	}
 }
 

@@ -158,7 +158,7 @@ func GetConfig() *vo.AppConfig {
 	}
 	var config vo.AppConfig
 	if err := toml.Unmarshal(buf, &config); err != nil {
-		Sugar.Infof(_cm + " error: %v", err)
+		Sugar.Infof(_cm + " error: %+v", err)
 	}
 	return &config
 }
