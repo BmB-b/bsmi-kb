@@ -34,8 +34,9 @@ Buy me a cup of coffee for $3
 那么编译命令如下， 是在Linux上面运行的。
 
 ```go 
+go generate
 
-/usr/local/go/bin/go build -ldflags "-X 'github.com/cnmade/bsmi-kb/pkg/version.BuildTag=$(git describe --tags --abbrev=0)' -X 'github.com/cnmade/bsmi-kb/pkg/version.BuildNum=$(date  '+%Y%m%d%H%M%S')'" --tags "json1 fts5 secure_delete" -v .
+/usr/local/go/bin/go build  --tags "json1 fts5 secure_delete" -v .
 ```
 
 需要加上sqlite 扩展json1
