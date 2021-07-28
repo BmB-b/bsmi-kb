@@ -31,12 +31,11 @@ Buy me a cup of coffee for $3
 
 推荐在x64架构的cpu的电脑上运行，理论上windows, Linux 和mac都可以用
 
-那么编译命令如下， 是在Linux上面运行的。
+那么编译命令如下， 在windows,Linux上面验证过的。
 
 ```go 
 go generate
-
-/usr/local/go/bin/go build  --tags "json1 fts5 secure_delete" -v .
+go build  --tags "json1 fts5 secure_delete" -v .
 ```
 
 需要加上sqlite 扩展json1
