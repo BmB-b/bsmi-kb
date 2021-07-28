@@ -7,6 +7,13 @@ demo 预览地址： [https://kb.bsmi.info/#](https://kb.bsmi.info/#)
 
 文档地址：[https://kb.bsmi.info/#view/3](https://kb.bsmi.info/#view/3)
 
+
+Buy me a cup of coffee for $3
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M54KKIF)
+
+
+
 如果你想安装，使用，或者是参加开发，可以读一下文档
 
 ## 起源
