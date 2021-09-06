@@ -1,5 +1,6 @@
 # bsmi-kb
 
+感谢Github 提供代码托管
 
 bsmi kb 知识库,  
 
