@@ -36,6 +36,7 @@ require (
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.3.1 // indirect
 	gorm.io/datatypes v1.0.1
+	gorm.io/driver/postgres v1.0.8 // indirect
 	gorm.io/driver/sqlite v1.1.4
 	gorm.io/gorm v1.21.11
 )

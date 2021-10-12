@@ -31,7 +31,7 @@ func main() {
 			cliArgs1 = os.Args[2]
 		}
 
-		switch (cliArgs) {
+		switch cliArgs {
 		case "clearban":
 			fail_ban_service.ClearBan(cliArgs1)
 			return
@@ -47,11 +47,10 @@ func main() {
 
 	r := gin.New()
 	r.HTMLRender = pongo2gin.New(pongo2gin.RenderOptions{
-		TemplateDir: "views",
-		ContentType: "text/html; charset=utf-8",
+		TemplateDir:   "views",
+		ContentType:   "text/html; charset=utf-8",
 		AlwaysNoCache: true,
 	})
-
 
 	version_bytes, _ := ioutil.ReadFile("./public/version.js")
 	common.BsmiKbVersion = string(version_bytes)
@@ -61,10 +60,9 @@ func main() {
 
 	store := cookie.NewStore([]byte("gssecret"))
 	store.Options(sessions.Options{
-		Path: "/",
-		MaxAge: 999999999,
+		Path:     "/",
+		MaxAge:   999999999,
 		HttpOnly: true,
-
 	})
 	r.Use(sessions.Sessions("mysession", store))
 	fc := new(FrontController)
@@ -100,7 +98,6 @@ func main() {
 		admin.POST("/save-blog-edit", admincontroller.SaveBlogEditCtr)
 		admin.GET("/editblog/:id", admincontroller.EditBlogCtr)
 
-
 		admin.GET("/list-cate", admincontroller.ListCateCtr)
 		admin.POST("/save-edit-cate", admincontroller.SaveEditCateCtr)
 		admin.GET("/edit-cate/:id", admincontroller.EditCateCtr)
@@ -109,19 +106,15 @@ func main() {
 
 		admin.GET("/list-tag", admincontroller.ListTagCtr)
 
-
 		admin.GET("/files", admincontroller.Files)
 		admin.POST("/fileupload", admincontroller.FileUpload)
 	}
 
-
 	// rss
-
 
 	rss := new(RSS)
 	r.GET("/rss.php", rss.Alter)
 	r.GET("/rss", rss.Out)
-
 
 	a := new(Api)
 	api := r.Group("/api")
@@ -130,6 +123,12 @@ func main() {
 		api.GET("/nav-load", a.NavLoad)
 		api.POST("/resort", a.Resort)
 	}
+
+	//迁移db
+	/*go func() {
+		task.MigrateDbTask()
+	}()*/
+
 	log.Info().Msg("Server listen on 127.0.0.1:8005")
 	err := r.Run("127.0.0.1:8005")
 	if err != nil {
