@@ -58,6 +58,7 @@ func ShowMessage(c *gin.Context, m *vo.Msg) {
 			"siteName":        Config.Site_name,
 			"siteDescription": Config.Site_description,
 			"message":         m.Msg,
+			"url":             m.JumpUrl,
 		}))
 	return
 }

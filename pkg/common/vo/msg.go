@@ -1,5 +1,6 @@
 package vo
 
 type Msg struct {
-	Msg string
+	Msg     string
+	JumpUrl string
 }

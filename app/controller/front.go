@@ -490,14 +490,22 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 	_, username, isAdmin := UserPermissionCheckDefaultAllow(c)
 	c.Header("Cache-Control", "no-cache")
 	id := c.Param("id")
-
+	if id == "" {
+		id = "1"
+	}
 	var blogItem model.Article
 
 	result := common.NewDb.First(&blogItem, id)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+
+		jumpUrl := "/admin/login"
+		if isAdmin != "" {
+			jumpUrl = "/admin/addblog"
+		}
 		common.ShowMessage(c, &vo2.Msg{
-			Msg: "文章不存在",
+			Msg:     "首页不存在，你需要先创建首页",
+			JumpUrl: jumpUrl,
 		})
 		return
 	}
