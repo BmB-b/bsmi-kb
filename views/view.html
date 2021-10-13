@@ -101,13 +101,22 @@
                 {% if navItemList.Id > 0 %}
                 <ul>
                     <li><a href="/view/{{ navItemList.Id }}">{{ navItemList.Name }}</a>
+                        
                         {% for v1 in navItemList.Children %}
                         <ul>
                             <li><a href="/view/{{ v1.Id }}">{{ v1.Name }}</a>
+
                                 {% for v2 in v1.Children %}
                                 <ul>
                                     <li><a href="/view/{{ v2.Id }}">{{ v2.Name }}</a>
 
+                                        {% for v3 in v2.Children %}
+                                        <ul>
+                                            <li><a href="/view/{{ v3.Id }}">{{ v3.Name }}</a>
+
+                                            </li>
+                                        </ul>
+                                        {% endfor %}
                                     </li>
                                 </ul>
                                 {% endfor %}
@@ -122,10 +131,18 @@
                 <ul>
                 {% for v1 in navItemList.Children %}
                     <li><a href="/view/{{ v1.Id }}">{{ v1.Name }}</a>
+
                         {% for v2 in v1.Children %}
                         <ul>
                             <li><a href="/view/{{ v2.Id }}">{{ v2.Name }}</a>
 
+                                {% for v3 in v2.Children %}
+                                <ul>
+                                    <li><a href="/view/{{ v3.Id }}">{{ v3.Name }}</a>
+
+                                    </li>
+                                </ul>
+                                {% endfor %}
                             </li>
                         </ul>
                         {% endfor %}

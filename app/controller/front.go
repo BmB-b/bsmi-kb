@@ -581,6 +581,9 @@ func getPidList(aid int64, pidList []string) []string {
 
 func getNavItemList(pid int64, aid int64) *vo.Nav_item {
 
+	//上上级
+	var pParentItem model.Article
+	//上级
 	var parentItem model.Article
 	var sameLevelItem []model.Article
 	var childItem []model.Article
@@ -592,6 +595,11 @@ func getNavItemList(pid int64, aid int64) *vo.Nav_item {
 		Find(&sameLevelItem)
 	//取母级数据
 	common.NewDb.Where("aid = ? ", pid).Find(&parentItem)
+
+	//取上上级
+	if parentItem.PAid >= 0 {
+		common.NewDb.Where("aid = ?", parentItem.PAid).Find(&pParentItem)
+	}
 	//取子级数据
 	common.NewDb.Where("p_aid = ? ", aid).
 		Order("sort_id asc").
@@ -623,10 +631,24 @@ func getNavItemList(pid int64, aid int64) *vo.Nav_item {
 		}
 
 	}
-	return &vo.Nav_item{
-		Id:       uint64(parentItem.Aid),
-		Name:     parentItem.Title,
-		Children: childItemList,
+
+	if pParentItem.Aid > 0 {
+		return &vo.Nav_item{
+			Id:   uint64(pParentItem.Aid),
+			Name: pParentItem.Title,
+			Children: []vo.Nav_item{vo.Nav_item{
+				Id:       uint64(parentItem.Aid),
+				Name:     parentItem.Title,
+				Children: childItemList,
+			},
+			},
+		}
+	} else {
+		return &vo.Nav_item{
+			Id:       uint64(parentItem.Aid),
+			Name:     parentItem.Title,
+			Children: childItemList,
+		}
 	}
 }
 
