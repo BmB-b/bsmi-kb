@@ -23,7 +23,7 @@ import (
 	"time"
 )
 
-func UserPermissionCheck(c *gin.Context) (  err error, username interface{}, isAdmin interface{}) {
+func UserPermissionCheck(c *gin.Context) (err error, username interface{}, isAdmin interface{}) {
 	session := sessions.Default(c)
 	username = session.Get("username")
 	isAdmin = session.Get("isAdmin")
@@ -35,7 +35,7 @@ func UserPermissionCheck(c *gin.Context) (  err error, username interface{}, isA
 	return nil, username, isAdmin
 }
 
-func UserPermissionCheckDefaultAllow(c *gin.Context) (  err error, username interface{}, isAdmin interface{}) {
+func UserPermissionCheckDefaultAllow(c *gin.Context) (err error, username interface{}, isAdmin interface{}) {
 	session := sessions.Default(c)
 	username = session.Get("username")
 	if username == nil {
@@ -66,11 +66,11 @@ func (fc *FrontController) AboutCtr(c *gin.Context) {
 
 	c.HTML(200, "about.html",
 		common.Pongo2ContextWithVersion(pongo2.Context{
-			"siteName": Config.Site_name,
+			"siteName":        Config.Site_name,
 			"siteDescription": common.Config.Site_description,
-			"username": username.(string),
-			"isAdmin": isAdmin.(string),
-			"mActive":  "mActive",
+			"username":        username.(string),
+			"isAdmin":         isAdmin.(string),
+			"mActive":         "mActive",
 		}))
 	/*common.OutPutHtml(c, views.About(map[string]string{
 		"siteName":        Config.Site_name,
@@ -90,10 +90,10 @@ func (fc *FrontController) ChargeCtr(c *gin.Context) {
 
 	c.HTML(200, "charge.html",
 		common.Pongo2ContextWithVersion(pongo2.Context{
-			"siteName": Config.Site_name,
+			"siteName":        Config.Site_name,
 			"siteDescription": common.Config.Site_description,
-			"username": username.(string),
-			"isAdmin": isAdmin.(string),
+			"username":        username.(string),
+			"isAdmin":         isAdmin.(string),
 		}))
 }
 
@@ -134,7 +134,7 @@ func (fc *FrontController) ListTagCtr(c *gin.Context) {
 			"siteDescription": common.Config.Site_description,
 			"tags":            tagWithFontSize,
 			"username":        username.(string),
-			"isAdmin":        isAdmin.(string),
+			"isAdmin":         isAdmin.(string),
 			"tagActive":       "mActive",
 		}))
 	return
@@ -150,7 +150,7 @@ func (fc *FrontController) HomeCtr(c *gin.Context) {
 			return
 		}
 	}
-		c.Header("Cache-Control", "no-cache")
+	c.Header("Cache-Control", "no-cache")
 
 	cateId := c.DefaultQuery("cateId", "")
 
@@ -213,19 +213,19 @@ func (fc *FrontController) HomeCtr(c *gin.Context) {
 
 	c.HTML(200, "index.html",
 		common.Pongo2ContextWithVersion(pongo2.Context{
-			"siteName":       common.Config.Site_name,
+			"siteName":        common.Config.Site_name,
 			"siteDescription": common.Config.Site_description,
-			"username":       username.(string),
-			"isAdmin":       isAdmin.(string),
-			"blogDataList":   blogDataList,
-			"getCateFromMap": getFuncGetCateFromMap(),
-			"categories":     category_service.GetCategories(),
-			"prevPage":       fmt.Sprintf("%d", prev_page),
-			"nextPage":       fmt.Sprintf("%d", next_page),
-			"tagId":          tagId,
-			"cateId":         cateId,
-			"homeActive":     "mActive",
-			"SubCutContent": common.SubCutContent,
+			"username":        username.(string),
+			"isAdmin":         isAdmin.(string),
+			"blogDataList":    blogDataList,
+			"getCateFromMap":  getFuncGetCateFromMap(),
+			"categories":      category_service.GetCategories(),
+			"prevPage":        fmt.Sprintf("%d", prev_page),
+			"nextPage":        fmt.Sprintf("%d", next_page),
+			"tagId":           tagId,
+			"cateId":          cateId,
+			"homeActive":      "mActive",
+			"SubCutContent":   common.SubCutContent,
 		}))
 	return
 }
@@ -267,9 +267,8 @@ func ParseTitle(title sql.NullString, username interface{}) string {
 
 func (fc *FrontController) SearchCtr(c *gin.Context) {
 
-
 	_, username, isAdmin := UserPermissionCheckDefaultAllow(c)
-		c.Header("Cache-Control", "no-cache")
+	c.Header("Cache-Control", "no-cache")
 
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {
@@ -327,16 +326,14 @@ func (fc *FrontController) SearchCtr(c *gin.Context) {
 			"categories":     category_service.GetCategories(),
 			"keyword":        orig_keyword,
 			"username":       username.(string),
-			"isAdmin":       isAdmin.(string),
+			"isAdmin":        isAdmin.(string),
 			"prevPage":       fmt.Sprintf("%d", prev_page),
 			"nextPage":       fmt.Sprintf("%d", next_page),
 		}))
 	return
 }
 
-
 func (fc *FrontController) ArticleHistoryCtr(c *gin.Context) {
-
 
 	_, username, isAdmin := UserPermissionCheckDefaultAllow(c)
 	c.Header("Cache-Control", "no-cache")
@@ -390,9 +387,9 @@ func (fc *FrontController) ArticleHistoryCtr(c *gin.Context) {
 
 			"getCateFromMap": getFuncGetCateFromMap(),
 			"categories":     category_service.GetCategories(),
-			"aid":        aid,
+			"aid":            aid,
 			"username":       username.(string),
-			"isAdmin":       isAdmin.(string),
+			"isAdmin":        isAdmin.(string),
 			"prevPage":       fmt.Sprintf("%d", prev_page),
 			"nextPage":       fmt.Sprintf("%d", next_page),
 		}))
@@ -400,7 +397,6 @@ func (fc *FrontController) ArticleHistoryCtr(c *gin.Context) {
 }
 
 func (fc *FrontController) ViewAltCtr(c *gin.Context) {
-
 
 	id := c.DefaultQuery("id", "0")
 	c.Redirect(301, fmt.Sprintf("/view/%s", id))
@@ -436,9 +432,7 @@ func (fc *FrontController) CountViewCtr(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("document.getElementById('vct').innerHTML=%d", blogItem.Views))
 }
 
-
 func (fc *FrontController) ViewArticleHistoryCtr(c *gin.Context) {
-
 
 	_, username, isAdmin := UserPermissionCheckDefaultAllow(c)
 	c.Header("Cache-Control", "no-cache")
@@ -466,14 +460,14 @@ func (fc *FrontController) ViewArticleHistoryCtr(c *gin.Context) {
 
 	c.HTML(200, "view_article_history.html",
 		common.Pongo2ContextWithVersion(pongo2.Context{
-			"title": blogItem.Title,
+			"title":           blogItem.Title,
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.SubCutContent(blogItem.Content, 64),
 
 			"getCateFromMap": getFuncGetCateFromMap(),
 			"categories":     category_service.GetCategories(),
 			"username":       username.(string),
-			"isAdmin":       isAdmin.(string),
+			"isAdmin":        isAdmin.(string),
 
 			"tags": tag_service.BatchGetTagName(tagIds),
 			"out": map[string]string{
@@ -483,7 +477,7 @@ func (fc *FrontController) ViewArticleHistoryCtr(c *gin.Context) {
 				"title":       blogItem.Title,
 				"content":     blogItem.Content,
 				"publishTime": blogItem.PublishTime,
-				"updateTime": blogItem.UpdateTime,
+				"updateTime":  blogItem.UpdateTime,
 				"username":    username.(string),
 			},
 		}))
@@ -492,7 +486,6 @@ func (fc *FrontController) ViewArticleHistoryCtr(c *gin.Context) {
 }
 
 func (fc *FrontController) ViewCtr(c *gin.Context) {
-
 
 	_, username, isAdmin := UserPermissionCheckDefaultAllow(c)
 	c.Header("Cache-Control", "no-cache")
@@ -516,7 +509,6 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 		pidList = getPidList(blogItem.PAid, pidList)
 	}
 
-
 	var tagIds []int64
 
 	err := json.Unmarshal(blogItem.TagIds, &tagIds)
@@ -526,14 +518,14 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 
 	c.HTML(200, "view.html",
 		common.Pongo2ContextWithVersion(pongo2.Context{
-		    "title": blogItem.Title,
+			"title":           blogItem.Title,
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.SubCutContent(blogItem.Content, 64),
-			"pidList": strings.Join(pidList, ","),
-			"getCateFromMap": getFuncGetCateFromMap(),
-			"categories":     category_service.GetCategories(),
-			"username":       username.(string),
-			"isAdmin":       isAdmin.(string),
+			"pidList":         strings.Join(pidList, ","),
+			"getCateFromMap":  getFuncGetCateFromMap(),
+			"categories":      category_service.GetCategories(),
+			"username":        username.(string),
+			"isAdmin":         isAdmin.(string),
 
 			"tags": tag_service.BatchGetTagName(tagIds),
 			"out": map[string]string{
@@ -543,7 +535,7 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 				"title":       blogItem.Title,
 				"content":     blogItem.Content,
 				"publishTime": blogItem.PublishTime,
-				"updateTime": blogItem.UpdateTime,
+				"updateTime":  blogItem.UpdateTime,
 				"username":    username.(string),
 			},
 		}))
@@ -557,15 +549,14 @@ func getPidList(aid int64, pidList []string) []string {
 
 	pid := aid
 
-
 	for pid > 0 {
 
-		 common.NewDb.First(&blogItem, pid)
-		 pid = blogItem.PAid
+		common.NewDb.First(&blogItem, pid)
+		pid = blogItem.PAid
 
-		 if (blogItem.Aid > 0) {
-		 	 pidList = append(pidList, strconv.FormatInt(blogItem.Aid, 10))
-		 }
+		if blogItem.Aid > 0 {
+			pidList = append(pidList, strconv.FormatInt(blogItem.Aid, 10))
+		}
 	}
 	return pidList
 }
@@ -593,7 +584,6 @@ func (fc *FrontController) checkNeedChargeButNotRedirect(c *gin.Context, tt sql.
 	}
 	return false
 }
-
 
 func (fc *FrontController) LogoutCtr(c *gin.Context) {
 	session := sessions.Default(c)

@@ -102,7 +102,7 @@
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-9 px-md-4" id="content">
-
+            <p>欢迎来到知识库，点击左边导航菜单浏览</p>
         </main>
     </div>
 </div>
@@ -222,26 +222,6 @@
         })
 
 
-        let handleHashChange = function () {
-            let urlHash = window.location.hash;
-            console.log('url hash: ' + urlHash);
-            let articlId = 0;
-
-            if (urlHash.length > 6) {
-                articlId = urlHash.substr(6);
-            }
-
-            if (articlId > 0) {
-                view_article(articlId)
-            } else {
-                if (urlHash.length <= 0) {
-                    view_article(1);
-                }
-            }
-        };
-        $(window).on('hashchange', handleHashChange)
-
-
         var $tree = $('#tree1');
         $.getJSON(
             '/api/nav-all/',
@@ -258,13 +238,11 @@
                         // Append a link to the jqtree-element div.
                         // The link has an url '#node-[id]' and a data property 'node-id'.
                         $li.find('.jqtree-title').html(
-                            '<a href="/#view/' + node.id + '">' + node.name + '</a>'
+                            '<a href="/view/' + node.id + '">' + node.name + '</a>'
                         );
                     }
                 });
 
-                //刚进来，展示首页
-                handleHashChange();
             }
         );
 
@@ -274,14 +252,6 @@
         //    $tree.tree('openNode', node);
 
         $('#tree1').on(
-            "tree.click",
-            function (e) {
-                //  e.preventDefault();
-                console.log(e.node.name);
-                //top.location = "/view/" + e.node.id;
-                view_article(e.node.id);
-            }
-        ).on(
             'tree.move',
             function (event) {
 
