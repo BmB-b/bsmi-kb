@@ -587,11 +587,15 @@ func getNavItemList(pid int64, aid int64) *vo.Nav_item {
 
 	//取上一层级，取本层级
 
-	common.NewDb.Where("p_aid = ? ", pid).Find(&sameLevelItem)
+	common.NewDb.Where("p_aid = ? ", pid).
+		Order("sort_id asc").
+		Find(&sameLevelItem)
 	//取母级数据
 	common.NewDb.Where("aid = ? ", pid).Find(&parentItem)
 	//取子级数据
-	common.NewDb.Where("p_aid = ? ", aid).Find(&childItem)
+	common.NewDb.Where("p_aid = ? ", aid).
+		Order("sort_id asc").
+		Find(&childItem)
 
 	//同级的
 	var childItemList []vo.Nav_item
@@ -633,7 +637,9 @@ func getNavItemListForHome() *vo.Nav_item {
 
 	//取上一层级，取本层级
 
-	common.NewDb.Where("p_aid = ? ", 0).Find(&sameLevelItem)
+	common.NewDb.Where("p_aid = ? ", 0).
+		Order("sort_id asc").
+		Find(&sameLevelItem)
 
 	//同级的
 	var childItemList []vo.Nav_item
@@ -647,7 +653,9 @@ func getNavItemListForHome() *vo.Nav_item {
 			}
 
 			//取子级数据
-			common.NewDb.Where("p_aid = ? ", v.Aid).Find(&childItem)
+			common.NewDb.Where("p_aid = ? ", v.Aid).
+				Order("sort_id asc").
+				Find(&childItem)
 
 			if childItem != nil && len(childItem) > 0 {
 				childItemList2 = []vo.Nav_item{}
