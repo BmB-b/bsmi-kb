@@ -512,17 +512,17 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 
 	// 把上级的id找出来
 
-	pidList := []string{strconv.FormatInt(blogItem.Aid, 10)}
+	pidList := []int64{blogItem.Aid}
 	if blogItem.PAid > 0 {
 		pidList = getPidList(blogItem.PAid, pidList)
 	}
-
-	var tmpNavItemList *vo.Nav_item
+	common.Sugar.Infof("pidList: %+v", pidList)
+	var tmpNavItemList []vo.Nav_item
 	if blogItem.Aid <= 1 {
 		tmpNavItemList = getNavItemListForHome()
 	} else {
 
-		tmpNavItemList = getNavItemList(blogItem.PAid, blogItem.Aid)
+		tmpNavItemList = getNavItemList(blogItem.PAid, blogItem.Aid, pidList)
 	}
 
 	common.Sugar.Infof("navItemList: %+v", tmpNavItemList)
@@ -538,7 +538,6 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 			"title":           blogItem.Title,
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.SubCutContent(blogItem.Content, 64),
-			"pidList":         strings.Join(pidList, ","),
 			"navItemList":     tmpNavItemList,
 			"getCateFromMap":  getFuncGetCateFromMap(),
 			"categories":      category_service.GetCategories(),
@@ -561,7 +560,7 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 
 }
 
-func getPidList(aid int64, pidList []string) []string {
+func getPidList(aid int64, pidList []int64) []int64 {
 
 	var blogItem model.Article
 
@@ -573,86 +572,90 @@ func getPidList(aid int64, pidList []string) []string {
 		pid = blogItem.PAid
 
 		if blogItem.Aid > 0 {
-			pidList = append(pidList, strconv.FormatInt(blogItem.Aid, 10))
+			pidList = append(pidList, blogItem.Aid)
 		}
 	}
 	return pidList
 }
 
-func getNavItemList(pid int64, aid int64) *vo.Nav_item {
+func getNavItemList(pid int64, aid int64, pidList []int64) []vo.Nav_item {
+
+	var outList []vo.Nav_item
 
 	//上上级
-	var pParentItem model.Article
 	//上级
-	var parentItem model.Article
-	var sameLevelItem []model.Article
-	var childItem []model.Article
+	var firstList []model.Article
 
-	//取上一层级，取本层级
+	//取第一层级，取本层级
 
-	common.NewDb.Where("p_aid = ? ", pid).
+	common.NewDb.Where("p_aid = ? ", 0).
 		Order("sort_id asc").
-		Find(&sameLevelItem)
-	//取母级数据
-	common.NewDb.Where("aid = ? ", pid).Find(&parentItem)
-
-	//取上上级
-	if parentItem.PAid >= 0 {
-		common.NewDb.Where("aid = ?", parentItem.PAid).Find(&pParentItem)
-	}
-	//取子级数据
-	common.NewDb.Where("p_aid = ? ", aid).
-		Order("sort_id asc").
-		Find(&childItem)
-
-	//同级的
-	var childItemList []vo.Nav_item
-	var childItemList2 []vo.Nav_item
-
-	if sameLevelItem != nil && len(sameLevelItem) > 0 {
-		for _, v := range sameLevelItem {
-			tmpNavItem := vo.Nav_item{
-				Id:   uint64(v.Aid),
+		Find(&firstList)
+	if firstList != nil && len(firstList) > 0 {
+		//循环查数据
+		for _, v := range firstList {
+			tmpNav := vo.Nav_item{
+				Id:   v.Aid,
 				Name: v.Title,
 			}
-			//拿下一级子菜单
-			if v.Aid == aid {
-				if childItem != nil && len(childItem) > 0 {
-					for _, v1 := range childItem {
-						childItemList2 = append(childItemList2, vo.Nav_item{
-							Id:   uint64(v1.Aid),
-							Name: v1.Title,
-						})
-					}
-					tmpNavItem.Children = childItemList2
+
+			for _, vp := range pidList {
+				//id 在 列表里面，就把他们都查出来
+				if v.Aid == vp {
+					tmpNav = processChildNav(tmpNav, pidList)
 				}
 			}
-			childItemList = append(childItemList, tmpNavItem)
-		}
 
+			outList = append(outList, tmpNav)
+		}
 	}
 
-	if pParentItem.Aid > 0 {
-		return &vo.Nav_item{
-			Id:   uint64(pParentItem.Aid),
-			Name: pParentItem.Title,
-			Children: []vo.Nav_item{vo.Nav_item{
-				Id:       uint64(parentItem.Aid),
-				Name:     parentItem.Title,
-				Children: childItemList,
-			},
-			},
-		}
-	} else {
-		return &vo.Nav_item{
-			Id:       uint64(parentItem.Aid),
-			Name:     parentItem.Title,
-			Children: childItemList,
-		}
-	}
+	return outList
 }
 
-func getNavItemListForHome() *vo.Nav_item {
+func processChildNav(nav vo.Nav_item, pidList []int64) vo.Nav_item {
+
+	childNavList := []vo.Nav_item{}
+	//处理子节点
+
+	childItem := []model.Article{}
+
+	common.NewDb.Where("p_aid = ? ", nav.Id).
+		Order("sort_id asc").
+		Find(&childItem)
+	if childItem != nil && len(childItem) > 0 {
+		childNavList = []vo.Nav_item{}
+		for _, v1 := range childItem {
+			tmpNavItem := vo.Nav_item{
+				Id:   v1.Aid,
+				Name: v1.Title,
+			}
+			for _, vp := range pidList {
+				//id 在 列表里面，就把他们都查出来
+				if v1.Aid == vp {
+					//	nextPidList := removeElementFromList(pidList, v1.Aid)
+					tmpNavItem = processChildNav(tmpNavItem, pidList)
+
+				}
+			}
+			childNavList = append(childNavList, tmpNavItem)
+		}
+		nav.Children = childNavList
+	}
+	return nav
+}
+
+func removeElementFromList(pidList []int64, aid int64) []int64 {
+	var newPidList []int64
+	for _, v := range pidList {
+		if v != aid {
+			newPidList = append(newPidList, v)
+		}
+	}
+	return newPidList
+}
+
+func getNavItemListForHome() []vo.Nav_item {
 
 	var sameLevelItem []model.Article
 	var childItem []model.Article
@@ -670,7 +673,7 @@ func getNavItemListForHome() *vo.Nav_item {
 	if sameLevelItem != nil && len(sameLevelItem) > 0 {
 		for _, v := range sameLevelItem {
 			tmpNavItem := vo.Nav_item{
-				Id:   uint64(v.Aid),
+				Id:   v.Aid,
 				Name: v.Title,
 			}
 
@@ -683,7 +686,7 @@ func getNavItemListForHome() *vo.Nav_item {
 				childItemList2 = []vo.Nav_item{}
 				for _, v1 := range childItem {
 					childItemList2 = append(childItemList2, vo.Nav_item{
-						Id:   uint64(v1.Aid),
+						Id:   v1.Aid,
 						Name: v1.Title,
 					})
 				}
@@ -693,9 +696,7 @@ func getNavItemListForHome() *vo.Nav_item {
 		}
 
 	}
-	return &vo.Nav_item{
-		Children: childItemList,
-	}
+	return childItemList
 }
 
 func (fc *FrontController) checkNeedCharge(c *gin.Context, blog vo.VBlogItem) bool {

@@ -40,7 +40,7 @@ func (a *Api) NavAll(c *gin.Context) {
 	for _, s := range articleList {
 		na = append(na, vo.Nav_item{
 			Name:         s.Title,
-			Id:           uint64(s.Aid),
+			Id:           s.Aid,
 			LoadOnDemand: true,
 		})
 	}
@@ -79,7 +79,7 @@ func (a *Api) NavLoad(c *gin.Context) {
 	for _, s := range articleList {
 		na = append(na, vo.Nav_item{
 			Name:         s.Title,
-			Id:           uint64(s.Aid),
+			Id:           s.Aid,
 			LoadOnDemand: true,
 		})
 	}
@@ -93,10 +93,10 @@ func (a *Api) NavLoad(c *gin.Context) {
 func (a *Api) Resort(c *gin.Context) {
 
 	_, username, _ := UserPermissionCheckDefaultAllow(c)
-		if username == "" {
-			c.Redirect(301, "/admin/login")
-			return
-		}
+	if username == "" {
+		c.Redirect(301, "/admin/login")
+		return
+	}
 	var req vo.Resort_req
 
 	err := c.ShouldBindJSON(&req)
@@ -132,4 +132,3 @@ type apiBlogItem struct {
 	Title   string `form:"title" json:"title"  binding:"required"`
 	Content string `form:"content" json:"content"  binding:"required"`
 }
-
