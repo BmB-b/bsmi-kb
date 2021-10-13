@@ -509,6 +509,9 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 		pidList = getPidList(blogItem.PAid, pidList)
 	}
 
+	tmpNavItemList := getNavItemList(blogItem.PAid, blogItem.Aid)
+
+	common.Sugar.Infof("navItemList: %+v", tmpNavItemList)
 	var tagIds []int64
 
 	err := json.Unmarshal(blogItem.TagIds, &tagIds)
@@ -522,6 +525,7 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.SubCutContent(blogItem.Content, 64),
 			"pidList":         strings.Join(pidList, ","),
+			"navItemList":     tmpNavItemList,
 			"getCateFromMap":  getFuncGetCateFromMap(),
 			"categories":      category_service.GetCategories(),
 			"username":        username.(string),
@@ -559,6 +563,53 @@ func getPidList(aid int64, pidList []string) []string {
 		}
 	}
 	return pidList
+}
+
+func getNavItemList(pid int64, aid int64) *vo.Nav_item {
+
+	var parentItem model.Article
+	var sameLevelItem []model.Article
+	var childItem []model.Article
+
+	//取上一层级，取本层级
+
+	common.NewDb.Where("p_aid = ? ", pid).Find(&sameLevelItem)
+	//取母级数据
+	common.NewDb.Where("aid = ? ", pid).Find(&parentItem)
+	//取子级数据
+	common.NewDb.Where("p_aid = ? ", aid).Find(&childItem)
+
+	//同级的
+	var childItemList []vo.Nav_item
+	var childItemList2 []vo.Nav_item
+
+	if sameLevelItem != nil && len(sameLevelItem) > 0 {
+		for _, v := range sameLevelItem {
+			tmpNavItem := vo.Nav_item{
+				Id:   uint64(v.Aid),
+				Name: v.Title,
+			}
+			//拿下一级子菜单
+			if v.Aid == aid {
+				if childItem != nil && len(childItem) > 0 {
+					for _, v1 := range childItem {
+						childItemList2 = append(childItemList2, vo.Nav_item{
+							Id:   uint64(v1.Aid),
+							Name: v1.Title,
+						})
+					}
+					tmpNavItem.Children = childItemList2
+				}
+			}
+			childItemList = append(childItemList, tmpNavItem)
+		}
+
+	}
+	return &vo.Nav_item{
+		Id:       uint64(parentItem.Aid),
+		Name:     parentItem.Title,
+		Children: childItemList,
+	}
 }
 
 func (fc *FrontController) checkNeedCharge(c *gin.Context, blog vo.VBlogItem) bool {
