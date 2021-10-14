@@ -685,10 +685,28 @@ func getNavItemListForHome() []vo.Nav_item {
 			if childItem != nil && len(childItem) > 0 {
 				childItemList2 = []vo.Nav_item{}
 				for _, v1 := range childItem {
-					childItemList2 = append(childItemList2, vo.Nav_item{
+					tmpNavItemLv3 := vo.Nav_item{
 						Id:   v1.Aid,
 						Name: v1.Title,
-					})
+					}
+					//取子级数据
+					common.NewDb.Where("p_aid = ? ", v1.Aid).
+						Order("sort_id asc").
+						Find(&childItem)
+
+					if childItem != nil && len(childItem) > 0 {
+						childItemList3 := []vo.Nav_item{}
+						for _, v1 := range childItem {
+							tmpNavItemLv3 := vo.Nav_item{
+								Id:   v1.Aid,
+								Name: v1.Title,
+							}
+
+							childItemList3 = append(childItemList3, tmpNavItemLv3)
+						}
+						tmpNavItemLv3.Children = childItemList3
+					}
+					childItemList2 = append(childItemList2, tmpNavItemLv3)
 				}
 				tmpNavItem.Children = childItemList2
 			}
