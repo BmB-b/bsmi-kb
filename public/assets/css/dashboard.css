@@ -114,7 +114,8 @@ a {
 }
 
 .leftnav {
-    width: 380px;
+    min-width: 200px;
+    max-width: 380px;
     height: calc(100vh - 60px);
     position: relative;
     overflow-y: scroll;

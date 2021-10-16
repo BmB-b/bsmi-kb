@@ -34,9 +34,9 @@ func LoginCtr(c *gin.Context) {
 func LoginProcessCtr(c *gin.Context) {
 	clientIp := http_utils.GetClientIp(c)
 	if fail_ban_service.CheckBan(clientIp) == true {
-			common.ShowUMessage(c, &vo.Umsg{Msg: "登录失败,您已经被记录"})
-			//fail ban
-			return
+		common.ShowUMessage(c, &vo.Umsg{Msg: "登录失败,您已经被记录"})
+		//fail ban
+		return
 	}
 	//检查fail ban，如果被封禁了，就果断拦截
 	if common.Config.CaptchaEnabled == 1 {
@@ -66,24 +66,28 @@ func LoginProcessCtr(c *gin.Context) {
 		keyA, _ := gonanoid.Nanoid(20)
 		keyB, _ := gonanoid.Nanoid(20)
 
+		keyBStr := ""
 		switch common.Config.TwoAuthType {
+		case 0:
+			keyBStr = keyB //DO nothing
 		case 1:
 			email_service.SendTwoAuth(common.Config.AdminEmail, keyB)
-			break;
+			break
 		case 2:
 			mailgun_service.SendTwoAuth(common.Config.AdminEmail, keyB)
-			break;
+			break
 		}
 
 		loc, _ := time.LoadLocation("Asia/Shanghai")
 		var item model.TwoAuth
 		item.CreatedAt = time.Now().In(loc)
-		item.KeyA = keyA;
-		item.KeyB = keyB;
+		item.KeyA = keyA
+		item.KeyB = keyB
 		common.NewDb.Create(&item)
 
 		c.HTML(200, "admin/login-process.html",
 			common.Pongo2ContextWithVersion(pongo2.Context{
+				"keyB":            keyBStr,
 				"siteName":        common.Config.Site_name,
 				"siteDescription": common.Config.Site_description,
 			}))
@@ -128,16 +132,14 @@ func LoginStep3Ctr(c *gin.Context) {
 		return
 	}
 
-
-
 	session := sessions.Default(c)
 
-	var twoAuthItem model.TwoAuth;
+	var twoAuthItem model.TwoAuth
 	common.NewDb.Find(&twoAuthItem, "key_b = ?", form.TwoAuthCode)
 
 	//登录失败
 	//根据key a 查 key b是否被点过， 如果点过，就把这条记录标记为已登录
-	if  twoAuthItem.KeyB == form.TwoAuthCode && twoAuthItem.Status == 0 {
+	if twoAuthItem.KeyB == form.TwoAuthCode && twoAuthItem.Status == 0 {
 		//登录成功
 		session.Set("username", common.Config.Admin_user)
 		session.Set("isAdmin", "yes")

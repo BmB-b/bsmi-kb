@@ -27,7 +27,11 @@
     <form action="/admin/loginStep3" method="post" enctype="multipart/form-data" class="login-form">
         <table>
             <tr>
-                <td>两步验证码:</td>
+                <td>两步验证码:
+                {% if keyB != "" %}
+                    {{ keyB }}
+                    {% endif %}
+                </td>
                 <td><input type="text" name="two_auth_code"></td>
             </tr>
             <tr>
