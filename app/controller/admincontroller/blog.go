@@ -30,7 +30,7 @@ func DeleteBlogCtr(c *gin.Context) {
 		return
 	}
 	var BI vo.EditBlog_vo
-	err  = c.MustBindWith(&BI, binding.Form)
+	err = c.MustBindWith(&BI, binding.Form)
 	if err != nil {
 		common.LogError(err)
 		common.ShowUMessage(c, &vo2.Umsg{Msg: err.Error(), Url: "/"})
@@ -93,7 +93,7 @@ func ListBlogCtr(c *gin.Context) {
 			"siteDescription": common.Config.Site_description,
 			"blogDataList":    blogDataList,
 			"username":        username.(string),
-			"isAdmin":        isAdmin.(string),
+			"isAdmin":         isAdmin.(string),
 			"prevPage":        fmt.Sprintf("%d", prev_page),
 			"nextPage":        fmt.Sprintf("%d", next_page),
 		}))
@@ -138,15 +138,15 @@ func EditBlogCtr(c *gin.Context) {
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.Config.Site_description,
 			"username":        username.(string),
-			"isAdmin":        isAdmin.(string),
+			"isAdmin":         isAdmin.(string),
 			"aid":             fmt.Sprintf("%d", blogItem.Aid),
 			"title":           blogItem.Title,
 			"content":         blogItem.Content,
 			"publishTime":     blogItem.PublishTime,
 			"tags":            strings.Join(tagStr, ","),
-			"paid": blogItem.PAid,
+			"paid":            blogItem.PAid,
 			"categories":      categories,
-			"cateId":      blogItem.CateId,
+			"cateId":          blogItem.CateId,
 			"views":           fmt.Sprintf("%d", blogItem.Views),
 		}))
 	return
@@ -161,7 +161,7 @@ func SaveBlogEditCtr(c *gin.Context) {
 		return
 	}
 	var BI vo.EditBlog_vo
-	err  = c.MustBindWith(&BI, binding.Form)
+	err = c.MustBindWith(&BI, binding.Form)
 	if err != nil {
 		common.LogError(err)
 		common.ShowUMessage(c, &vo2.Umsg{Msg: err.Error(), Url: "javascript:history.go(-1)"})
@@ -198,25 +198,22 @@ func SaveBlogEditCtr(c *gin.Context) {
 		return
 	}
 
-
 	//保存 文章历史
-
 
 	ahItem := model.ArticleHistory{
 		Aid:           blogItem.Aid,
 		Title:         blogItem.Title,
 		Content:       blogItem.Content,
 		PublishTime:   blogItem.PublishTime,
-		UpdateTime:   blogItem.UpdateTime,
+		UpdateTime:    blogItem.UpdateTime,
 		PublishStatus: 1,
 		CateId:        blogItem.CateId,
 		TagIds:        blogItem.TagIds,
-		PAid: blogItem.PAid,
-		SortId: blogItem.SortId,
+		PAid:          blogItem.PAid,
+		SortId:        blogItem.SortId,
 	}
 
 	_ = common.NewDb.Create(&ahItem)
-
 
 	//处理保存编辑帖子
 
@@ -240,7 +237,7 @@ func SaveBlogEditCtr(c *gin.Context) {
 	CKey := fmt.Sprintf("blogitem-%d", BI.Aid)
 	common.LogInfo("Remove cache Key:" + CKey)
 
-	c.Redirect(http.StatusFound, fmt.Sprintf("/#view/%d", BI.Aid))
+	c.Redirect(http.StatusFound, fmt.Sprintf("/view/%d", BI.Aid))
 
 }
 
@@ -263,7 +260,7 @@ func AddBlogCtr(c *gin.Context) {
 			"siteName":        common.Config.Site_name,
 			"siteDescription": common.Config.Site_description,
 			"categories":      categories,
-			"paid": paid,
+			"paid":            paid,
 		}))
 	return
 }
@@ -307,21 +304,20 @@ func SaveBlogAddCtr(c *gin.Context) {
 		Title:         BI.Title,
 		Content:       BI.Content,
 		PublishTime:   time.Now().In(loc).Format("2006-01-02 15:04:05"),
-		UpdateTime:   time.Now().In(loc).Format("2006-01-02 15:04:05"),
+		UpdateTime:    time.Now().In(loc).Format("2006-01-02 15:04:05"),
 		PublishStatus: 1,
 		CateId:        BI.CateId,
 		TagIds:        tagIdStr,
-		PAid: BI.PAid,
+		PAid:          BI.PAid,
 	}
 
 	result := common.NewDb.Create(&blogItem)
-
 
 	for _, tmpTagId := range tagIds {
 		tag_service.RefreshCountOfArticle(tmpTagId)
 	}
 	if result.Error == nil {
-		c.Redirect(http.StatusFound, fmt.Sprintf("/#view/%d", nextAid))
+		c.Redirect(http.StatusFound, fmt.Sprintf("/view/%d", nextAid))
 	} else {
 		common.LogError(result.Error)
 		common.ShowUMessage(c, &vo2.Umsg{Msg: "失败", Url: "/"})
