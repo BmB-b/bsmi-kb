@@ -120,3 +120,7 @@ a {
     position: relative;
     overflow-y: scroll;
 }
+
+.currentActiveText {
+    border-bottom: 1px dashed;
+}

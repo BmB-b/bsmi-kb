@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ out.content|striptags|truncatewords: 200 }}">
-    <title>{{ out.title }} 知识库 - BSMI KB 基础标准矿产工业</title>
+    <meta name="description" content="">
+    <title>知识库 - BSMI KB 基础标准矿产工业</title>
 
 
     <!-- Bootstrap core CSS -->
@@ -101,32 +101,68 @@
 
                 <ul>
                 {% for v1 in navItemList %}
-                    <li><a href="/view/{{ v1.Id }}">{{ v1.Name }}</a>
+                    <li><a href="/view/{{ v1.Id }}"
+
+                           {% if v1.Id == out.aid %}
+                           class="currentActiveText"
+                           {% endif %}
+                            >{{ v1.Name }}</a>
 
                         {% for v2 in v1.Children %}
                         <ul>
-                            <li><a href="/view/{{ v2.Id }}">{{ v2.Name }}</a>
+                            <li><a href="/view/{{ v2.Id }}"
+
+                                   {% if v2.Id == out.aid %}
+                                   class="currentActiveText"
+                                   {% endif %}
+                            >{{ v2.Name }}</a>
 
                                 {% for v3 in v2.Children %}
                                 <ul>
-                                    <li><a href="/view/{{ v3.Id }}">{{ v3.Name }}</a>
+                                    <li><a href="/view/{{ v3.Id }}"
+
+                                           {% if v3.Id == out.aid %}
+                                           class="currentActiveText"
+                                           {% endif %}
+                                    >{{ v3.Name }}</a>
 
                                         {% for v4 in v3.Children %}
                                         <ul>
-                                            <li><a href="/view/{{ v4.Id }}">{{ v4.Name }}</a>
+                                            <li><a href="/view/{{ v4.Id }}"
+
+                                                   {% if v4.Id == out.aid %}
+                                                   class="currentActiveText"
+                                                   {% endif %}
+                                            >{{ v4.Name }}</a>
 
                                                 {% for v5 in v4.Children %}
                                                 <ul>
-                                                    <li><a href="/view/{{ v5.Id }}">{{ v5.Name }}</a>
+                                                    <li><a href="/view/{{ v5.Id }}"
+
+                                                           {% if v5.Id == out.aid %}
+                                                           class="currentActiveText"
+                                                           {% endif %}
+                                                    >{{ v5.Name }}</a>
 
                                                         {% for v6 in v5.Children %}
                                                         <ul>
-                                                            <li><a href="/view/{{ v6.Id }}">{{ v6.Name }}</a>
+                                                            <li><a href="/view/{{ v6.Id }}"
+
+                                                                   {% if v6.Id == out.aid %}
+                                                                   class="currentActiveText"
+                                                                   {% endif %}
+                                                            >{{ v6.Name }}</a>
 
 
                                                                 {% for v7 in v6.Children %}
                                                                 <ul>
-                                                                    <li><a href="/view/{{ v7.Id }}">{{ v7.Name }}</a>
+                                                                    <li><a href="/view/{{ v7.Id }}"
+
+                                                                           {% if v7.Id == out.aid %}
+                                                                           class="currentActiveText"
+                                                                           {% endif %}
+
+                                                                    >{{ v7.Name }}</a>
 
                                                                     </li>
                                                                 </ul>

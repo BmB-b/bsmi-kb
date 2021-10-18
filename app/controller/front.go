@@ -545,8 +545,8 @@ func (fc *FrontController) ViewCtr(c *gin.Context) {
 			"isAdmin":         isAdmin.(string),
 
 			"tags": tag_service.BatchGetTagName(tagIds),
-			"out": map[string]string{
-				"aid":         fmt.Sprintf("%d", blogItem.Aid),
+			"out": map[string]interface{}{
+				"aid":         blogItem.Aid,
 				"cateName":    getFuncGetCateFromMap()(blogItem.CateId),
 				"cateId":      fmt.Sprintf("%d", blogItem.CateId),
 				"title":       blogItem.Title,
