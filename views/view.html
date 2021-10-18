@@ -67,25 +67,24 @@
         </div>
     </form>
 
-
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">
 
             {% if username != "" %}
             <div style="color:white">
                 <span id="update-info"></span> 欢迎 {{ username }} |
-                <a href="/admin">管理后台</a> |
-                <a href="/admin/list-cate">分类</a> |
-                <a href="/admin/list-tag">标签</a> |
+                <a href="/admin" rel="nofollow">管理后台</a> |
+                <a href="/admin/list-cate" rel="nofollow">分类</a> |
+                <a href="/admin/list-tag" rel="nofollow">标签</a> |
 
-                <a href="/admin/addblog">新建页面</a> |
-                <a href="/admin/addblog?paid={{ out.aid }}" id="add-sub-page">新建子页面</a> |
+                <a href="/admin/addblog" rel="nofollow">新建页面</a> |
+                <a href="/admin/addblog" id="add-sub-page" rel="nofollow">新建子页面</a> |
 
-                <a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                <a href="/admin/logout" rel="nofollow"><i class="fas fa-sign-out-alt"></i> 退出</a>
             </div>
             {% else %}
 
-            <a class="nav-link px-3" href="/admin/login">登录</a>
+            <a class="nav-link px-3" href="/admin/login" rel="nofollow">登录</a>
             {% endif %}
         </div>
     </div>
