@@ -55,7 +55,7 @@ func main() {
 
 	r.Static("/assets", "./public/assets")
 	r.Static("/oss", "./vol/oss")
-
+	r.StaticFile("/robots.txt", "./public/robots.txt")
 	store := cookie.NewStore([]byte("gssecret"))
 	store.Options(sessions.Options{
 		Path:     "/",
