@@ -11,7 +11,7 @@
 
                     {% for blog in blogDataList %}
                     <li>{% if blog.CateId > 0 %}[<a href="/?cateId={{blog.CateId}}">{{ getCateFromMap(blog.CateId) }}</a>]{% endif %}
-                        <a href="/#view/{{ blog.Aid }}"> {{ blog.Title }}</a>  <span class="ts">{{ blog.PublishTime }}</span>
+                        <a href="/view/{{ blog.Aid }}"> {{ blog.Title }}</a>  <span class="ts">{{ blog.PublishTime }}</span>
                         <p>{{ SubCutContent(blog.Content, 256)|safe }}</p>
                     </li>
                     {% endfor %}
