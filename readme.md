@@ -36,10 +36,9 @@ Buy me a cup of coffee for $3
 
 ```go 
 go generate
-go build  --tags "json1 fts5 secure_delete" -v .
+go build   -v .
 ```
 
-需要加上sqlite 扩展json1
 
 这样开发环境就可以用了，可以开始体验了
 

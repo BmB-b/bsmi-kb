@@ -17,7 +17,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/h2non/filetype"
 	gonanoid "github.com/matoous/go-nanoid"
-	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/gorm"
 	"image"
 	"io/ioutil"
@@ -230,7 +229,7 @@ func UploadByLocalStorage(c *gin.Context) (string, bool) {
 		body = buf.Bytes()
 	}
 
-	preFileName := fmt.Sprintf("/oss/%s/%s", prefix, newFileName +"."+kind.Extension)
+	preFileName := fmt.Sprintf("/oss/%s/%s", prefix, newFileName+"."+kind.Extension)
 	writeToFileName := "./vol" + preFileName
 
 	common.Sugar.Infof("The writeToFileName: %+v", writeToFileName)
@@ -339,7 +338,7 @@ func UploadByAwsS3(c *gin.Context) (string, bool) {
 		body = buf.Bytes()
 	}
 
-	preFileName := fmt.Sprintf("%s/%s", prefix, newFileName +"."+kind.Extension)
+	preFileName := fmt.Sprintf("%s/%s", prefix, newFileName+"."+kind.Extension)
 	params := &s3.PutObjectInput{
 		Bucket:      aws.String(common.Config.ObjectStorage.Aws_bucket),
 		Key:         aws.String(preFileName),

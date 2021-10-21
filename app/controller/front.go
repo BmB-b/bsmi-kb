@@ -14,7 +14,6 @@ import (
 	"github.com/flosch/pongo2/v4"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/gorm"
 	"math"
 	"net/http"

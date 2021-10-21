@@ -145,6 +145,7 @@ func EditBlogCtr(c *gin.Context) {
 			"publishTime":     blogItem.PublishTime,
 			"tags":            strings.Join(tagStr, ","),
 			"paid":            blogItem.PAid,
+			"sortId":          blogItem.SortId,
 			"categories":      categories,
 			"cateId":          blogItem.CateId,
 			"views":           fmt.Sprintf("%d", blogItem.Views),
@@ -225,6 +226,7 @@ func SaveBlogEditCtr(c *gin.Context) {
 	blogItem.Content = BI.Content
 	blogItem.TagIds = tagIdStr
 	blogItem.PAid = BI.PAid
+	blogItem.SortId = BI.SortId
 	blogItem.UpdateTime = time.Now().In(loc).Format("2006-01-02 15:04:05")
 	common.NewDb.
 		Where("aid = ?", blogItem.Aid).
@@ -309,6 +311,7 @@ func SaveBlogAddCtr(c *gin.Context) {
 		CateId:        BI.CateId,
 		TagIds:        tagIdStr,
 		PAid:          BI.PAid,
+		SortId:        BI.SortId,
 	}
 
 	result := common.NewDb.Create(&blogItem)

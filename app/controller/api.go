@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"fmt"
-	_ "github.com/mattn/go-sqlite3"
 	"net/http"
 	"strconv"
 )

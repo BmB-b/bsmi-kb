@@ -7,7 +7,6 @@ import (
 	"github.com/cnmade/bsmi-kb/pkg/common"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/feeds"
-	_ "github.com/mattn/go-sqlite3"
 	"net/http"
 	"time"
 )

@@ -22,7 +22,6 @@ require (
 	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
 	github.com/mailgun/mailgun-go/v4 v4.5.2
 	github.com/matoous/go-nanoid v1.5.0
-	github.com/mattn/go-sqlite3 v1.14.7
 	github.com/naoina/go-stringutil v0.1.0 // indirect
 	github.com/naoina/toml v0.1.1
 	github.com/rs/zerolog v1.23.0
@@ -37,6 +36,5 @@ require (
 	gopkg.in/mail.v2 v2.3.1 // indirect
 	gorm.io/datatypes v1.0.1
 	gorm.io/driver/postgres v1.0.8 // indirect
-	gorm.io/driver/sqlite v1.1.4
 	gorm.io/gorm v1.21.11
 )
