@@ -6,7 +6,7 @@ bsmi kb 知识库,
 
 demo 预览地址： [https://kb.bsmi.info/#](https://kb.bsmi.info/#)
 
-文档地址：[https://kb.bsmi.info/#view/3](https://kb.bsmi.info/#view/3)
+文档地址：[https://kb.bsmi.info/view/3](https://kb.bsmi.info/view/3)
 
 
 Buy me a cup of coffee for $3
