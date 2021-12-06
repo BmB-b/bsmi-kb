@@ -128,7 +128,6 @@ a {
     max-width: 360px;
     height: calc(100vh - 60px);
     position: relative;
-    overflow-y: scroll;
 }
 
 .currentActiveText {
