@@ -31,10 +31,20 @@ a {
     z-index: 100; /* Behind the navbar */
     padding: 48px 0 0; /* Height of navbar */
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    overflow: auto;
+}
+
+
+@media (max-width: 960px) {
+    .sidebar {
+        max-width: 250px;
+        top: 5rem;
+    }
 }
 
 @media (max-width: 767.98px) {
     .sidebar {
+        max-width: 200px;
         top: 5rem;
     }
 }
