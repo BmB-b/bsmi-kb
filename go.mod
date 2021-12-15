@@ -3,7 +3,7 @@ module github.com/cnmade/bsmi-kb
 go 1.15
 
 require (
-	github.com/aws/aws-sdk-go v1.42.17
+	github.com/aws/aws-sdk-go v1.42.23
 	github.com/cnmade/pongo2gin v1.0.5
 	github.com/disintegration/imaging v1.6.2
 	github.com/flosch/pongo2/v4 v4.0.2
@@ -17,6 +17,7 @@ require (
 	github.com/grokify/html-strip-tags-go v0.0.1
 	github.com/h2non/filetype v1.1.3
 	github.com/imdario/mergo v0.3.12
+	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
 	github.com/kataras/hcaptcha v0.0.0-20200711031247-2927d4faf32f
@@ -32,8 +33,9 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.19.1
+	golang.org/x/crypto v0.0.0-20211209193657-4570a0811e8b // indirect
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
-	golang.org/x/sys v0.0.0-20211124211545-fe61309f8881 // indirect
+	golang.org/x/sys v0.0.0-20211214234402-4825e8c3871d // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
