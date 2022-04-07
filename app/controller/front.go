@@ -44,8 +44,8 @@ func UserPermissionCheckDefaultAllow(c *gin.Context) (err error, username interf
 	if isAdmin == nil {
 		isAdmin = ""
 	}
-	common.Sugar.Infof("username was: %s", username.(string))
-	common.Sugar.Infof("isAdmin was: %s", isAdmin.(string))
+	common.Sugar.Infof("username was: %v", username)
+	common.Sugar.Infof("isAdmin was: %v", isAdmin)
 	return nil, username, isAdmin
 }
 
