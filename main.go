@@ -126,7 +126,7 @@ func main() {
 		task.MigrateDbTask()
 	}()*/
 
-	log.Info().Msg("Server listen on http://127.0.0.1:8005")
+	log.Info().Msg("Server listen on 127.0.0.1:8005")
 	err := r.Run("127.0.0.1:8005")
 	if err != nil {
 		common.LogError(err)
